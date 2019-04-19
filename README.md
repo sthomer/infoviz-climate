@@ -27,38 +27,38 @@
 * That other thing
 
 ## Timeline
-Week  | Date  | Task
----   | ---   | ---
-10    | 4/19  | Scope and Planning
-      | 4/20  | Define Functionality
-      | 4/21  | Define Components
-11    | 4/22  | App Structure
-      | 4/23  | *Due: Division of Labor*
-      | 4/24  | Individual Work
-      | 4/25  | Individual Work
-      | 4/26  | Individual Work
-      | 4/27  | Individual Work
-      | 4/28  | *Due: Minimum Viable Products (MVPs)
-12    | 4/29  | Connect Components
-      | 4/30  | Additional Datasets
-      | 5/1   | Connect Datasets
-      | 5/2   | User Experience
-      | 5/3   | Story and Defaults
-      | 5/4   | Styling
-      | 5/5   | *Due: Integration*
-13    | 5/6   | Debugging 
-      | 5/7   | Debugging
-      | 5/8   | Debugging
-      | 5/9   | Debugging
-      | 5/10  | *Due: Complete App*
-      | 5/11  | Report
-      | 5/12  | *Due: Report*
-14    | 5/13  | **Due: Case Studies**
-      | 5/14  | Video
-      | 5/15  | Video
-      | 5/16  | *Due: Video*
-      | 5/17  | Presentation
-      | 5/18  | Presentation
-      | 5/19  | *Due: Presentation*
-15    | 5/20  | **Due: Project and Presentation**
-      | 5/21  | **Presentation**
+| Week  | Date  | Task
+| ---   | ---   | ---
+| 10    | 4/19  | Scope and Planning
+|       | 4/20  | Define Functionality
+|       | 4/21  | Define Components
+| 11    | 4/22  | App Structure
+|       | 4/23  | *Due: Division of Labor*
+|       | 4/24  | Individual Work
+|       | 4/25  | Individual Work
+|       | 4/26  | Individual Work
+|       | 4/27  | Individual Work
+|       | 4/28  | *Due: Minimum Viable Products (MVPs)*
+| 12    | 4/29  | Connect Components
+|       | 4/30  | Additional Datasets
+|       | 5/1   | Connect Datasets
+|       | 5/2   | User Experience
+|       | 5/3   | Story and Defaults
+|       | 5/4   | Styling
+|       | 5/5   | *Due: Integration*
+| 13    | 5/6   | Debugging 
+|       | 5/7   | Debugging
+|       | 5/8   | Debugging
+|       | 5/9   | Debugging
+|       | 5/10  | *Due: Complete App*
+|       | 5/11  | Report
+|       | 5/12  | *Due: Report*
+| 14    | 5/13  | **Due: Case Studies**
+|       | 5/14  | Video
+|       | 5/15  | Video
+|       | 5/16  | *Due: Video*
+|       | 5/17  | Presentation
+|       | 5/18  | Presentation
+|       | 5/19  | *Due: Presentation*
+| 15    | 5/20  | **Due: Project and Presentation**
+|       | 5/21  | **Presentation**
