@@ -28,6 +28,7 @@
 
 ## Timeline
 Week  | Date  | Task
+---   | ---   | ---
 10    | 4/19  | Scope and Planning
       | 4/20  | Define Functionality
       | 4/21  | Define Components
