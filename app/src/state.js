@@ -1,9 +1,9 @@
 export const data = {
-  view: 'home',
+  view: 'map',
   views: [
-    { id: 'home', content: 'Home' },
+    // { id: 'home', content: 'Home' },
+    { id: 'map', content: 'Map' },
     { id: 'info', content: 'Info' },
     { id: 'spec', content: 'Spec' },
-    { id: 'map', content: 'Map' },
   ],
 }

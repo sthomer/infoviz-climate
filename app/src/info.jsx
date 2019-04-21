@@ -1,12 +1,12 @@
 import React from 'react';
-import { Title } from './styles';
+import { Title, Heading } from './styles';
 
 export default class Info extends React.Component {
   render() {
     return (
       <>
         <Title>Questions</Title>
-        Track 1: Effects of Humanity on Climate Change
+        <Heading>Track 1: Effects of Humanity on Climate Change</Heading>
         <ul>
           <li>
             Which human activities have the most impact on climate change?
@@ -21,7 +21,7 @@ export default class Info extends React.Component {
             Are we screwed?
           </li>
         </ul>
-        Track 2: Effects of Climate Change on Humanity
+        <Heading>Track 2: Effects of Climate Change on Humanity</Heading>
         <ul>
           <li>
             What consequences of climate change have the most impact on humanity?
@@ -37,7 +37,7 @@ export default class Info extends React.Component {
           </li>
         </ul>
         <Title>Propositions</Title>
-        Track 1: Effects of Humanity on Climate Change
+        <Heading>Track 1: Effects of Humanity on Climate Change</Heading>
         <ul>
           <li>
             CO2/other particulates effect on atmosphere
@@ -55,7 +55,7 @@ export default class Info extends React.Component {
             Climate projections according to different mitigation scenarios
           </li>
         </ul>
-        Track 2: Effects of Climate Change on Humanity
+        <Heading>Track 2: Effects of Climate Change on Humanity</Heading>
         <ul>
           <li>
             Sea level rise, droughts, flooding, storm frequency
@@ -74,7 +74,7 @@ export default class Info extends React.Component {
           </li>
         </ul>
         <Title>Datasets</Title>
-        Current:
+        <Heading>Current:</Heading>
         <ul>
           <li>
             <a href="https://github.com/awesomedata/awesome-public-datasets#climate-weather">
@@ -92,14 +92,14 @@ export default class Info extends React.Component {
             </a>: CO2 Data over time
           </li>
         </ul>
-        Searching:
+        <Heading>Searching:</Heading>
         <ul>
           <li>
             Government mitigation programs with projections
           </li>
         </ul>
         <Title>Visualizations</Title>
-        Multi-modal Map
+        <Heading>Multi-modal Map</Heading>
         <ul>
           <li>
             World/Regional map that will display certain data depending on subject
@@ -108,7 +108,7 @@ export default class Info extends React.Component {
             e.g. display temperatures, anomalies, emissions, etc.
           </li>
         </ul>
-        Time Machine
+        <Heading>Time Machine</Heading>
         <ul>
           <li>
             Given a certain data feature, view that over time (100 years?)

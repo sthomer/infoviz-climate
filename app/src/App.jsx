@@ -3,6 +3,7 @@ import '@atlaskit/css-reset';
 import { data } from './state';
 import styled from 'styled-components';
 import Info from './info';
+import Spec from './spec';
 import Map from './map';
 import Navigation from './navigation';
 
@@ -15,6 +16,7 @@ const GrowOuter = styled.div`
 const GrowInner = styled.div`
   flex: 1 1 auto;
   margin: 8px;
+  padding: 8px;
   border: 1px solid lightgrey;
   border-radius: 2px;
   background-color: white;
@@ -24,10 +26,9 @@ const GrowInner = styled.div`
 export default class App extends React.Component {
   state = data;
 
-  view = {
-    'home': 'Home',
+  views = {
     'info': <Info />,
-    'spec': 'Spec',
+    'spec': <Spec />,
     'map': <Map />,
   }
 
@@ -45,7 +46,7 @@ export default class App extends React.Component {
           items={this.state.views}
         />
         <GrowInner>
-          {this.view[this.state.view]}
+          {this.views[this.state.view]}
         </GrowInner>
       </GrowOuter>
     );

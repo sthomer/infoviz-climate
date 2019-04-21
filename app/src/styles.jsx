@@ -2,13 +2,17 @@ import styled from 'styled-components';
 
 export const Container = styled.div`
   margin: 8px;
+  padding: 8px;
   border: 1px solid lightgrey;
   border-radius: 2px;
   background-color: white;
 `;
 
 export const Title = styled.h1`
-  padding: 8px;
+  white-space: nowrap;
+`;
+
+export const Heading = styled.h4`
   white-space: nowrap;
 `;
 
@@ -17,8 +21,8 @@ export const Button = styled.button`
   color: ${props => props.selected ? 'white' : 'inherit'};
   border: 1px solid lightgrey;
   border-radius: 2px;
+  margin: 0px 4px 0px 4px;
   padding: 8px;
-  margin: 8px;
   &:focus {
     outline: none;
   };
