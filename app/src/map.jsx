@@ -1,6 +1,7 @@
 import React from 'react';
 import * as d3 from 'd3';
-import { world } from './world'
+import { world } from './world';
+import { Title } from './styles';
 
 export default class Map extends React.Component {
 
@@ -11,7 +12,8 @@ export default class Map extends React.Component {
       .scale(width / 2 / Math.PI)
       .translate([width/2, height/2])
     const map = d3.geoPath().projection(projection);
-    return (
+    return (<>
+      <Title>Map</Title>
       <svg width={width} height={height}>
         <path 
           d={map(world)}
@@ -19,6 +21,6 @@ export default class Map extends React.Component {
           fill="none"
         />
       </svg>
-    )
+    </>)
   }
 }
