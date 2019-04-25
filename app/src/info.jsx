@@ -10,6 +10,9 @@ export default class Info extends React.Component {
         <ul>
           <li>
             Which human activities have the most impact on climate change?
+            <ul>
+              <li> i found this <a href="https://www.bloomberg.com/graphics/2015-whats-warming-the-world/"> nice representation </a> and i wanted to add it here </li>
+            </ul>
           </li>
           <li>
             What countries/regions contribute most to these activities?
@@ -25,6 +28,9 @@ export default class Info extends React.Component {
         <ul>
           <li>
             What consequences of climate change have the most impact on humanity?
+            <ul>
+              <li> This might help us <a href="https://www.climatehotmap.org/global-warming-effects/health.html"> to have some relation between data or have better idea what to combine which variables in a diagram </a></li>
+            </ul>
           </li>
           <li>
             What regions/habitats are most affected?

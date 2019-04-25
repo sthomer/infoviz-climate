@@ -2,10 +2,14 @@ import React from 'react';
 import '@atlaskit/css-reset';
 import { data } from './state';
 import styled from 'styled-components';
+import Navigation from './navigation';
 import Info from './info';
 import Spec from './spec';
 import Map from './map';
-import Navigation from './navigation';
+import Auxiliary from './auxiliary';
+import Timelines from './timelines';
+import Menu from './menu';
+
 
 const GrowOuter = styled.div`
   display: flex;
@@ -30,6 +34,9 @@ export default class App extends React.Component {
     'info': <Info />,
     'spec': <Spec />,
     'map': <Map />,
+    'aux': <Auxiliary />,
+    'time': <Timelines />,
+    'menu': <Menu />,
   }
 
   onViewSelect = id => this.setState(state => ({

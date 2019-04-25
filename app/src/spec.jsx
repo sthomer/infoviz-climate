@@ -57,6 +57,12 @@ export default class Spec extends React.Component {
         <li>Customization: choose which plots and graphs are displayed</li>
       </ul>
 
+      <Heading>Example/Inspiration</Heading>
+      <ul>
+        <li><a href="https://www.climate.gov/maps-data ">There are a couple of maps diagrams that show timelines of tempratures and different interesting changes over time</a> </li>
+        <li> what missing in the link above is the interactivity, however, we could access the data they have used from  <a href="https://www.ncei.noaa.gov/access"> NCEI </a> </li>
+      </ul>
+
       <Title>Variable Selection</Title>
       <Heading>Functionality</Heading>
       <ul>
@@ -72,6 +78,10 @@ export default class Spec extends React.Component {
       <ul>
         <li>Hover: display description of variables</li>
         <li>Suggestion: display interesting combinations of variables</li>
+      </ul>
+      <Heading> Example/Inspiration </Heading>
+      <ul>
+        <li><a href="http://www.impactlab.org/map/">This is a nice representation of selecting one variable at time </a> </li>
       </ul>
     </>);
   }
