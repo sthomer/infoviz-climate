@@ -19,10 +19,18 @@
 > Listing of tasks and features we're working on with associated deadlines
 ### Steve
 * Something
+
 ### Fabian
 * Something else
+
 ### Max
-* Yet something different
+#### DataSets & type formats
+* [CO2 emission (CSV, XLSX)](https://www.gapminder.org/data/?fbclid=IwAR0X_u7_UY8mcXPHC1hP2esrgkFCVh6wGexF19ys-anB0EBAcVQl1EiDqzk)  
+  * [Example plot - Line Plot](https://www.gapminder.org/tools/#$state$marker$axis_y$which=co2_emissions_tonnes_per_person&spaceRef:null;;;&chart-type=linechart)
+  * [Example plot - Circle plot](https://www.gapminder.org/tools/#$state$marker$axis_y$which=co2_emissions_tonnes_per_person&domainMin:null&domainMax:null&zoomedMin:null&zoomedMax:null&scaleType=genericLog&spaceRef:null;;;&chart-type=bubbles)
+* Extreme temperature
+    * [person affected 1971-2008 (XLS)](https://docs.google.com/spreadsheets/d/1IKD51VpIaK2Dk4hwTURMjsGcmHWq7BudL4vRtlRJ4VM/pub#)
+    * [person killed 1971-2008 (XLS)](https://docs.google.com/spreadsheets/d/1LC6WyEXrPWtEjVzhEPUC8Ma1tJg1XEz9eFilS03kggw/pub)
 ### Abed
 * That other thing
 
@@ -46,7 +54,7 @@
 |       | 5/3   | Story and Defaults
 |       | 5/4   | Styling
 |       | 5/5   | *Due: Integration*
-| 13    | 5/6   | Debugging 
+| 13    | 5/6   | Debugging
 |       | 5/7   | Debugging
 |       | 5/8   | Debugging
 |       | 5/9   | Debugging
