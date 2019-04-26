@@ -1,7 +1,7 @@
 # Stories for the visualization depending on the dataset
 
 ## Dataset
-### [Berkeley Earth](https://www.kaggle.com/berkeleyearth/climate-change-earth-surface-temperature-data/version/2) ? 
+### [Berkeley Earth](https://www.kaggle.com/berkeleyearth/climate-change-earth-surface-temperature-data/version/2) 
 GlobalLandTemperaturesByCountry.csv : Temperature for every country from 1700 to 2013  
 GlobalTemperatures.csv : Min&Max Temperature for Sea/land from 1700 to 2013
 
