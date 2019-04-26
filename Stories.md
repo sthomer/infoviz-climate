@@ -74,3 +74,13 @@ If it is **possible**, we can point the mouse over a country and see the number 
 
 Maybe we do it in a way that is being played directly with some little tutorial or a small box where we put information on how to look exactly at the data and how someone could interpret it.
 
+
+## Story 2.1
+
+We could extend or use this version instead of story 2 but this time, we inclue multiple variables in the map. In this case we could choose which variables we want to show on the map. Each variable would have its own representation. An example would be that the people affected/dead would have a bubble(circle) representation. Tempratures are colors based.
+
+### Variables
+
+1. people who are affected by extreme tempratures
+2. people who died by extreme tempratures
+3. temprature of the sea level [it can be found here if you searched for Global Mean Sea Surface Temperature ](http://geodata.grid.unep.ch)
