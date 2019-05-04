@@ -5,10 +5,10 @@ import styled from 'styled-components';
 import Navigation from './navigation';
 import Info from './info';
 import Spec from './spec';
-import Map from './map';
 import Auxiliary from './auxiliary';
 import Timelines from './timelines';
 import Menu from './menu';
+import Map from './imap';
 
 
 const GrowOuter = styled.div`
@@ -37,12 +37,12 @@ export default class App extends React.Component {
     'aux': <Auxiliary />,
     'time': <Timelines />,
     'menu': <Menu />,
-  }
+  };
 
   onViewSelect = id => this.setState(state => ({
     ...state,
     view: id,
-  }))
+  }));
 
   render() {
     return (

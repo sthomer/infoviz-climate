@@ -2,33 +2,33 @@
 
 ## Dataset
 ### [Berkeley Earth](https://www.kaggle.com/berkeleyearth/climate-change-earth-surface-temperature-data/version/2) 
-GlobalLandTemperaturesByCountry.csv : Temperature for every country from 1700 to 2013  
-GlobalTemperatures.csv : Min&Max Temperature for Sea/land from 1700 to 2013
+`GlobalLandTemperaturesByCountry.csv` : Temperature for every country from 1700 to 2013  
+`GlobalTemperatures.csv` : Min&Max Temperature for Sea/land from 1700 to 2013
 
 ### [Gapminder.org](https://www.gapminder.org/data/?fbclid=IwAR0X_u7_UY8mcXPHC1hP2esrgkFCVh6wGexF19ys-anB0EBAcVQl1EiDqzk)
-co2_emissions_tonnes_per_person.csv : CO2 emission per tonne per person per country
-yearly_co2_emissions_1000_tonnes.csv : CO2 emission by year in 1000 tonnes
-sulfur_emissions_per_person_kg.csv : Sulfure emission per personn per tonnes per country
-forest_coverage_percent : Forest coverage in %
-forest_land_total_area_ha : Forest coverage in ha
+`co2_emissions_tonnes_per_person.csv` : CO2 emission per tonne per person per country
+`yearly_co2_emissions_1000_tonnes.csv` : CO2 emission by year in 1000 tonnes
+`sulfur_emissions_per_person_kg.csv` : Sulfur emission per person per tonnes per country
+`forest_coverage_percent` : Forest coverage in %
+`forest_land_total_area_ha` : Forest coverage in ha
 
 ## Story 1
 ### include
-Global temp, CO2, forest coverage, (sea level ?)
+Global temp, CO2, forest coverage, (sea level?)
 
 ### Story
 Show that we can (or not) correlate the different dataset and their effects on each other.
---> Less forest coverage, means less CO2 absorption, means more CO2 means increasing global temperature (which means higher sea level).  
-I have include sulfure emission that could also provide some information. For instance maybe we are only focusing on CO2 emission while sulfure is also increasing, and maybe it's not a big deal ?
+--> Less forest coverage, means less CO2 absorption, means more CO2 means increasing global temperature, which means higher sea level.  
+I have included sulfur emissions that could also provide some information. For instance maybe we are only focusing on CO2 emissions while sulfur is also increasing, and maybe it's not a big deal?
 
 ### Views
 **Maps :**
-* can choose between the dataset  
+* Choose between the datasets
 * Choose specific year from the dataset
 
 **Auxiliary View :**  
 If nothing selected :
-* plot that shows evolution of earth state (temp, CO2 and forest coverage)
+* plot showing evolution of earth state (temp, CO2 and forest coverage)
 * if CO2 emission, plot showing the biggest country with the highest number
 
 Selection :
@@ -39,12 +39,11 @@ Selection :
 
 ## Story 2
 
-Show the relation/corelation between people who are affected or dead by extreme tempratures with temprature anomalies.
+Show the relation/corelation between people who are affected or dead by extreme tempratures with temperature anomalies.
 
 ### Goal
 
-The goal is to see if the temprature anomalies are affecting the health of the people or not with time
-
+The goal is to see if the temprature anomalies are affecting the health of the people or not with time.
 
 ### Dataset
 
@@ -54,19 +53,18 @@ The goal is to see if the temprature anomalies are affecting the health of the p
 
 The time range is going to be from 1970 to 2008
 
-###
 
 ### Preliminary visualizations 
 
-1. A map where we could show some big bubbles to represent how many people dead and the continents are colors based on temprature anomaleis (the more red the continent, the more it's hotter and blue for more cold). We could see if the darker the color might give a bigger bubble or not.
+1. A map where we could show some big bubbles to represent how many people dead and the continents are colors based on temperature anomalies (the more red the continent, the more it's hotter and blue for more cold). We could see if the darker the color might give a bigger bubble or not.
 
 2. A time series line chart where we could two lines that being played at the same time progressing from 1970 to 2008 (after normalizing or curating the data so we could show them in them same scale or something) and to see the evolution of the lines if they are related or not. [something like this](https://www.bloomberg.com/graphics/2015-whats-warming-the-world/)
 
 ### Variable selection
 
-We could choose the *combination* of People who are affected *and/or* people who are dead from extreme tempratures. This would affect the bubble sizes that show how much people are affected/dead by the extremes temps.
+We could choose the *combination* of people who are affected *and/or* people who are dead from extreme temperatures. This would affect the bubble sizes that show how much people are affected/dead by the extremes temps.
 
-### Auxiallry view
+### Auxiliary view
 
 If it is **possible**, we can point the mouse over a country and see the number exactly of the dead/affected people.
 
@@ -77,10 +75,10 @@ Maybe we do it in a way that is being played directly with some little tutorial 
 
 ## Story 2.1
 
-We could extend or use this version instead of story 2 but this time, we inclue multiple variables in the map. In this case we could choose which variables we want to show on the map. Each variable would have its own representation. An example would be that the people affected/dead would have a bubble(circle) representation. Tempratures are colors based.
+We could extend or use this version instead of story 2 but this time, we inclue multiple variables in the map. In this case we could choose which variables we want to show on the map. Each variable would have its own representation. An example would be that the people affected/dead would have a bubble(circle) representation. Temperatures are color-based.
 
 ### Variables
 
-1. people who are affected by extreme tempratures
-2. people who died by extreme tempratures
-3. temprature of the sea level [it can be found here if you searched for Global Mean Sea Surface Temperature ](http://geodata.grid.unep.ch)
+1. people who are affected by extreme temperatures
+2. people who died by extreme temperatures
+3. temperature of the sea level [it can be found here if you searched for Global Mean Sea Surface Temperature ](http://geodata.grid.unep.ch)
