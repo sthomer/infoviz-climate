@@ -31,7 +31,20 @@ const mapStyle = {
 };
 
 const geographyPaths = topojson.feature(
-  allcountries, allcountries.objects.countries1).features
+  allcountries, allcountries.objects.countries1).features;
+
+const center = (coordinates) => {
+  const central = coordinates.length === 1
+    ? coordinates[0]
+    : coordinates.reduce((x, y) => x[0].length > y[0].length ? x : y)[0];
+  const min0 = central.map(x => x[0]).reduce((x, y) => Math.min(x, y));
+  const max0 = central.map(x => x[0]).reduce((x, y) => Math.max(x, y));
+  const min1 = central.map(x => x[1]).reduce((x, y) => Math.min(x, y));
+  const max1 = central.map(x => x[1]).reduce((x, y) => Math.max(x, y));
+  const geoCenter = [(max0 - min0)/2, (max1 - min1)/2];
+  // TODO: Convert to map dimensions in ZoomableGroup
+  return geoCenter;
+};
 
 class Map extends Component {
   constructor(props) {
@@ -47,6 +60,8 @@ class Map extends Component {
     this.setState(state => ({
       ...state,
       selected: geography,
+      center: center(geography.geometry.coordinates),
+      zoom: 3,
     }));
   };
 
