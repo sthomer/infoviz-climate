@@ -9,4 +9,5 @@ export const data = {
     { id: 'time', content: 'TLs' },
     { id: 'menu', content: 'Menu' },
   ],
-}
+  data: {},
+};

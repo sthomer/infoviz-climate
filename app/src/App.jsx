@@ -1,6 +1,6 @@
 import React from 'react';
 import '@atlaskit/css-reset';
-import { data } from './state';
+import {data} from './state';
 import styled from 'styled-components';
 import Navigation from './navigation';
 import Info from './info';
@@ -30,30 +30,31 @@ const GrowInner = styled.div`
 export default class App extends React.Component {
   state = data;
 
-  views = {
-    'info': <Info />,
-    'spec': <Spec />,
-    'map': <Map />,
-    'aux': <Auxiliary />,
-    'time': <Timelines />,
-    'menu': <Menu />,
-  };
-
   onViewSelect = id => this.setState(state => ({
     ...state,
     view: id,
   }));
 
+  onDataLoad = data => this.setState(state => ({
+    ...this.state,
+    data: data,
+  }));
+
   render() {
     return (
       <GrowOuter>
-        <Navigation 
-          onSelect={this.onViewSelect} 
+        <Navigation
+          onSelect={this.onViewSelect}
           selected={this.state.view}
           items={this.state.views}
         />
         <GrowInner>
-          {this.views[this.state.view]}
+          {this.state.view === 'info' ? <Info/> : undefined}
+          {this.state.view === 'spec' ? <Spec/> : undefined}
+          {this.state.view === 'map' ? <Map data={this.state.data}/> : undefined}
+          {this.state.view === 'aux' ? <Auxiliary/> : undefined}
+          {this.state.view === 'time' ? <Timelines/> : undefined}
+          {this.state.view === 'menu' ? <Menu load={this.onDataLoad}/> : undefined}
         </GrowInner>
       </GrowOuter>
     );

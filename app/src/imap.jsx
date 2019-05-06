@@ -8,30 +8,14 @@ import {
 import {Motion, spring} from 'react-motion';
 import * as topojson from 'topojson';
 import allcountries from './topojson/world-countries-sans-antarctica.json';
-
-const mapStyle = {
-  default: {
-    fill: "#ECEFF1",
-    stroke: "#607D8B",
-    strokeWidth: 0.75,
-    outline: "none",
-  },
-  hover: {
-    fill: "#607D8B",
-    stroke: "#607D8B",
-    strokeWidth: 0.75,
-    outline: "none",
-  },
-  pressed: {
-    fill: "#FF5722",
-    stroke: "#607D8B",
-    strokeWidth: 0.75,
-    outline: "none",
-  },
-};
+import * as d3 from 'd3';
 
 const geographyPaths = topojson.feature(
   allcountries, allcountries.objects.countries1).features;
+
+const tempScale = d3.scaleLinear()
+  .domain([0, -20, 20])
+  .range(["#CFD8DC","#607D8B","#37474F"]);
 
 const center = (coordinates) => {
   const central = coordinates.length === 1
@@ -41,10 +25,10 @@ const center = (coordinates) => {
   const max0 = central.map(x => x[0]).reduce((x, y) => Math.max(x, y));
   const min1 = central.map(x => x[1]).reduce((x, y) => Math.min(x, y));
   const max1 = central.map(x => x[1]).reduce((x, y) => Math.max(x, y));
-  const geoCenter = [(max0 - min0)/2, (max1 - min1)/2];
-  // TODO: Convert to map dimensions in ZoomableGroup
+  const geoCenter = [(max0 - min0) / 2 + min0, (max1 - min1) / 2 + min1];
   return geoCenter;
 };
+
 
 class Map extends Component {
   constructor(props) {
@@ -55,6 +39,14 @@ class Map extends Component {
       selected: {},
     };
   }
+
+  color = (geography) => {
+    if (this.props.data.temperatures === undefined) {
+      return "#ECEFF1";
+    } else {
+      return tempScale(this.props.data.temperatures[geography.properties.name])
+    }
+  };
 
   select = (geography, e) => {
     this.setState(state => ({
@@ -105,7 +97,26 @@ class Map extends Component {
                       geography={geography}
                       projection={projection}
                       onClick={this.select}
-                      style={mapStyle}
+                      style={{
+                        default: {
+                          fill: this.color(geography),
+                          stroke: "#607D8B",
+                          strokeWidth: 0.75,
+                          outline: "none",
+                        },
+                        hover: {
+                          fill: "#607D8B",
+                          stroke: "#607D8B",
+                          strokeWidth: 0.75,
+                          outline: "none",
+                        },
+                        pressed: {
+                          fill: "#FF5722",
+                          stroke: "#607D8B",
+                          strokeWidth: 0.75,
+                          outline: "none",
+                        },
+                      }}
                     />
                   ))}
                 </Geographies>
