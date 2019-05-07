@@ -43,6 +43,8 @@ class Map extends Component {
   color = (geography) => {
     if (this.props.data.temperatures === undefined) {
       return "#ECEFF1";
+    } else if (this.state.selected.id === geography.id) {
+      return "#FF5722";
     } else {
       return tempScale(this.props.data.temperatures[geography.properties.name])
     }
@@ -53,7 +55,7 @@ class Map extends Component {
       ...state,
       selected: geography,
       center: center(geography.geometry.coordinates),
-      zoom: 3,
+      zoom: 5,
     }));
   };
 
@@ -83,10 +85,9 @@ class Map extends Component {
         >
           {({zoom, x, y}) => (
             <ComposableMap
-              projectionConfig={{scale: 205}}
-              width={980}
-              height={560}
-              style={{width: "100%", height: "100%"}}
+              projectionConfig={{scale: 200}}
+              width={1200} height={500}
+              style={{width: "100%", height: "auto"}}
             >
               <ZoomableGroup center={[x, y]} zoom={zoom}
                              style={{width: "100%", height: "100%"}}>

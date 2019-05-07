@@ -2,30 +2,50 @@ import React from 'react';
 import '@atlaskit/css-reset';
 import {data} from './state';
 import styled from 'styled-components';
-import Navigation from './navigation';
-import Info from './info';
-import Spec from './spec';
 import Auxiliary from './auxiliary';
 import Timelines from './timelines';
-import Menu from './menu';
 import Map from './imap';
+import { PushButton } from './styles';
 
 
-const GrowOuter = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 100%;
+const Grid = styled.div`
+  display: grid;
+  overflow: hidden;
+  width: 100vw;
+  height: 100vh;
+  justify-content: center;
+  align-content: center;
+  grid-template-rows: 60vh 40vh;
+  grid-template-columns: 25vw 75vw;
+  grid-template-areas: 
+    "auxiliary map"
+    "auxiliary timeline"; 
+  grid-gap: 2px;
 `;
 
-const GrowInner = styled.div`
-  flex: 1 1 auto;
-  margin: 8px;
-  padding: 8px;
+const AuxiliaryPane = styled.div`
+  grid-area: auxiliary;
   border: 1px solid lightgrey;
-  border-radius: 2px;
-  background-color: white;
-  overflow: auto;
 `;
+
+const MapPane = styled.div`
+  grid-area: map;
+  border: 1px solid lightgrey;
+  overflow: hidden;
+`;
+
+const TimelinesPane = styled.div`
+  grid-area: timeline;
+  border: 1px solid lightgrey;
+`;
+
+const Floating = styled.div`
+  position: fixed;
+  z-index: 100;
+  top: 8px;
+  right: 8px;
+`;
+
 
 export default class App extends React.Component {
   state = data;
@@ -41,22 +61,21 @@ export default class App extends React.Component {
   }));
 
   render() {
-    return (
-      <GrowOuter>
-        <Navigation
-          onSelect={this.onViewSelect}
-          selected={this.state.view}
-          items={this.state.views}
-        />
-        <GrowInner>
-          {this.state.view === 'info' ? <Info/> : undefined}
-          {this.state.view === 'spec' ? <Spec/> : undefined}
-          {this.state.view === 'map' ? <Map data={this.state.data}/> : undefined}
-          {this.state.view === 'aux' ? <Auxiliary/> : undefined}
-          {this.state.view === 'time' ? <Timelines/> : undefined}
-          {this.state.view === 'menu' ? <Menu load={this.onDataLoad}/> : undefined}
-        </GrowInner>
-      </GrowOuter>
-    );
+    return (<>
+      <Grid>
+        <AuxiliaryPane>
+          <Auxiliary />
+        </AuxiliaryPane>
+        <MapPane>
+          <Map data={this.state.data}/>
+        </MapPane>
+        <TimelinesPane>
+          <Timelines/>
+        </TimelinesPane>
+      </Grid>
+      <Floating>
+        Button
+      </Floating>
+    </>);
   }
 }
