@@ -4,11 +4,16 @@ import styled from 'styled-components';
 import Auxiliary from './auxiliary';
 import Timelines from './timelines';
 import Map from './imap';
+import Menu from './menu';
 
 import geography from './topojson/world-countries-sans-antarctica.json';
 
 import temperature from './data/GlobalTempByCountryFrom1800.json';
-import co2pp from './data/co2_emissions_tonnes_per_person.json'
+import forestpercent from './data/forest_coverage_percent.json';
+import foresttotal from './data/forest_land_total_area_ha';
+import co2pp from './data/co2_emissions_tonnes_per_person.json';
+import co2total from './data/yearly_co2_emissions_1000_tonnes.json';
+import sulfurpp from './data/sulfur_emissions_per_person_kg';
 
 const Grid = styled.div`
   display: grid;
@@ -48,13 +53,32 @@ const Floating = styled.div`
   right: 8px;
 `;
 
+const datasets = {
+  temperature: temperature,
+  forestpercent: forestpercent,
+  foresttotal: foresttotal,
+  co2pp: co2pp,
+  co2total: co2total,
+  sulfurpp: sulfurpp,
+};
+
+const datasetList = [
+  {id: 'temperature', content: 'Average Temperature'},
+  {id: 'forestpercent', content: 'Forest Coverage (%)'},
+  {id: 'foresttotal', content: 'Forest Coverage (total)'},
+  {id: 'co2pp', content: 'CO2 Emission (per person)'},
+  {id: 'co2total', content: 'CO2 Emission (total)'},
+  {id: 'sulfurpp', content: 'Sulfur Emissions (per person)'},
+];
+
 
 export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       range: [1970, 2000],
-      current: 'temperature',
+      active: 'forestpercent',
+      data: datasets['forestpercent'],
     }
   }
 
@@ -63,9 +87,10 @@ export default class App extends React.Component {
     region: region,
   }));
 
-  onDataLoad = data => this.setState(state => ({
+  onDataSelect = data => this.setState(state => ({
     ...state,
-    data: data,
+    active: data,
+    data: datasets[data],
   }));
 
   onYearSelect = year => this.setState(state => ({
@@ -77,13 +102,13 @@ export default class App extends React.Component {
     return (<>
       <Grid>
         <AuxiliaryPane>
-          <Auxiliary />
+          <Auxiliary/>
         </AuxiliaryPane>
         <MapPane>
           <Map
             geography={geography}
             range={this.state.range}
-            data={{temperature: temperature}}
+            data={this.state.data}
             select={this.onRegionSelect}
           />
         </MapPane>
@@ -95,7 +120,11 @@ export default class App extends React.Component {
         </TimelinesPane>
       </Grid>
       <Floating>
-        Button
+        <Menu
+          select={this.onDataSelect}
+          items={datasetList}
+          active={this.state.active}
+        />
       </Floating>
     </>);
   }

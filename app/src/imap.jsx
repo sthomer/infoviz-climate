@@ -13,7 +13,7 @@ import * as d3 from 'd3';
 const geographyPaths = topojson.feature(
   allcountries, allcountries.objects.countries1).features;
 
-const tempScale = d3.scaleLinear()
+const scale = d3.scaleLinear()
   .domain([0, -20, 20])
   .range(["#CFD8DC", "#607D8B", "#37474F"]);
 
@@ -44,7 +44,7 @@ class Map extends Component {
 
 
   color = geography => {
-    if (this.props.data.temperature === undefined) {
+    if (this.props.data === undefined) {
       return "#ECEFF1";
     } else if (this.state.selected.id === geography.id) {
       return "#FF5722";
@@ -54,8 +54,8 @@ class Map extends Component {
       // const temps = this.props.data.temperature[geography.properties.name];
       // const rangeTemps = temps === undefined ? undefined : temps.slice(rangeIndex[0], rangeIndex[1]);
       // return tempScale(mean(rangeTemps));
-      const temp = this.props.data.temperature[geography.properties.name];
-      return tempScale(temp == undefined ? undefined : temp[0])
+      const data = this.props.data[geography.properties.name];
+      return scale(data == undefined ? undefined : data[0])
     }
   };
 
@@ -89,9 +89,9 @@ class Map extends Component {
             y: this.state.center[1],
           }}
           style={{
-            zoom: spring(this.state.zoom, {stiffness: 210, damping: 20}),
-            x: spring(this.state.center[0], {stiffness: 210, damping: 20}),
-            y: spring(this.state.center[1], {stiffness: 210, damping: 20}),
+            zoom: spring(this.state.zoom, {stiffness: 200, damping: 0}),
+            x: spring(this.state.center[0], {stiffness: 200, damping: 0}),
+            y: spring(this.state.center[1], {stiffness: 200, damping: 0}),
           }}
         >
           {({zoom, x, y}) => (
@@ -99,9 +99,12 @@ class Map extends Component {
               projectionConfig={{scale: 200}}
               style={{width: "100%", height: "auto"}}
             >
-              <ZoomableGroup center={[x, y]} zoom={zoom}
+              <ZoomableGroup center={this.state.center} zoom={this.state.zoom}
                              style={{width: "100%", height: "100%"}}>
-                <Geographies geography={geographyPaths}>
+                <Geographies
+                  geography={geographyPaths}
+                  disableOptimization={true}
+                >
                   {(geographies, projection) => geographies.map((geography, i) => (
                     <Geography
                       key={i}
