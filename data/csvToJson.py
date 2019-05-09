@@ -4,6 +4,7 @@ import sys
 
 def main():
 	globalData = {}
+	sizeVector = 2566
 	
 	if (len(sys.argv) < 3):
 		print("Error: please enter input file and output file as argument")
@@ -22,7 +23,7 @@ def main():
 			for row in reader:
 				if line_count == 0:
 					#globalData["colNames"] = row
-					globalData["dates"] = row
+					globalData["dates"] = row[1:]
 					line_count += 1
 
 				else:
@@ -33,6 +34,15 @@ def main():
 					globalData[name] = dataTemp
 
 		csv_file.close()
+		
+
+		for elem in globalData:
+			elemSize = len(globalData[elem])
+			if elemSize < sizeVector:
+				globalData[elem] = ([0] * (sizeVector - elemSize)) + globalData[elem]
+		
+		for elem in globalData:
+			print(len(globalData[elem]))
 
 		with open(outputFile, "w") as jsonFile:
 			json.dump(globalData, jsonFile)	
