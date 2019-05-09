@@ -46,7 +46,7 @@ class Map extends Component {
   color = geography => {
     if (this.props.data === undefined) {
       return "#ECEFF1";
-    } else if (this.state.selected.id === geography.id) {
+    } else if (this.props.selected === geography.properties.name) {
       return "#FF5722";
     } else {
       // const dates = this.props.data.temperature.dates.map(s => Number(s.split('-')[0]));
@@ -60,9 +60,9 @@ class Map extends Component {
   };
 
   select = (geography, e) => {
+    this.props.select(geography.properties.name);
     this.setState(state => ({
       ...state,
-      selected: geography,
       center: center(geography.geometry.coordinates),
       zoom: 4,
     }));
@@ -89,9 +89,9 @@ class Map extends Component {
             y: this.state.center[1],
           }}
           style={{
-            zoom: spring(this.state.zoom, {stiffness: 200, damping: 0}),
-            x: spring(this.state.center[0], {stiffness: 200, damping: 0}),
-            y: spring(this.state.center[1], {stiffness: 200, damping: 0}),
+            zoom: spring(this.state.zoom, {stiffness: 200, damping: 20}),
+            x: spring(this.state.center[0], {stiffness: 200, damping: 20}),
+            y: spring(this.state.center[1], {stiffness: 200, damping: 20}),
           }}
         >
           {({zoom, x, y}) => (
@@ -119,10 +119,11 @@ class Map extends Component {
                           outline: "none",
                         },
                         hover: {
-                          fill: "#607D8B",
+                          fill: this.color(geography),
                           stroke: "#607D8B",
                           strokeWidth: 0.75,
                           outline: "none",
+                          opacity: 0.9,
                         },
                         pressed: {
                           fill: "#FF5722",

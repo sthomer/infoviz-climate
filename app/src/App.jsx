@@ -76,9 +76,10 @@ export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      data: datasets['forestpercent'],
       range: [1970, 2000],
       active: 'forestpercent',
-      data: datasets['forestpercent'],
+      region: '',
     }
   }
 
@@ -110,6 +111,7 @@ export default class App extends React.Component {
             range={this.state.range}
             data={this.state.data}
             select={this.onRegionSelect}
+            selected={this.state.region}
           />
         </MapPane>
         <TimelinesPane>
