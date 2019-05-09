@@ -1,12 +1,14 @@
 import React from 'react';
 import '@atlaskit/css-reset';
-import {data} from './state';
 import styled from 'styled-components';
 import Auxiliary from './auxiliary';
 import Timelines from './timelines';
 import Map from './imap';
-import { PushButton } from './styles';
 
+import geography from './topojson/world-countries-sans-antarctica.json';
+
+import temperature from './data/GlobalTempByCountryFrom1800.json';
+import co2pp from './data/co2_emissions_tonnes_per_person.json'
 
 const Grid = styled.div`
   display: grid;
@@ -48,16 +50,27 @@ const Floating = styled.div`
 
 
 export default class App extends React.Component {
-  state = data;
+  constructor(props) {
+    super(props);
+    this.state = {
+      range: [1970, 2000],
+      current: 'temperature',
+    }
+  }
 
-  onViewSelect = id => this.setState(state => ({
+  onRegionSelect = region => this.setState(state => ({
     ...state,
-    view: id,
+    region: region,
   }));
 
   onDataLoad = data => this.setState(state => ({
-    ...this.state,
+    ...state,
     data: data,
+  }));
+
+  onYearSelect = year => this.setState(state => ({
+    ...state,
+    year: year,
   }));
 
   render() {
@@ -67,10 +80,18 @@ export default class App extends React.Component {
           <Auxiliary />
         </AuxiliaryPane>
         <MapPane>
-          <Map data={this.state.data}/>
+          <Map
+            geography={geography}
+            range={this.state.range}
+            data={{temperature: temperature}}
+            select={this.onRegionSelect}
+          />
         </MapPane>
         <TimelinesPane>
-          <Timelines/>
+          <Timelines
+            range={this.state.range}
+            select={this.onRangeSelect}
+          />
         </TimelinesPane>
       </Grid>
       <Floating>

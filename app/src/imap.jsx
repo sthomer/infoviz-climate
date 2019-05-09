@@ -15,7 +15,7 @@ const geographyPaths = topojson.feature(
 
 const tempScale = d3.scaleLinear()
   .domain([0, -20, 20])
-  .range(["#CFD8DC","#607D8B","#37474F"]);
+  .range(["#CFD8DC", "#607D8B", "#37474F"]);
 
 const center = (coordinates) => {
   const central = coordinates.length === 1
@@ -29,24 +29,33 @@ const center = (coordinates) => {
   return geoCenter;
 };
 
+const mean = ns => ns === undefined ? undefined
+  : ns.reduce((x, y) => Number(x) + Number(y)) / ns.length;
 
 class Map extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      center: [0, 20],
-      zoom: 1,
+      center: [0, 0],
+      zoom: 0.8,
       selected: {},
     };
   }
 
-  color = (geography) => {
-    if (this.props.data.temperatures === undefined) {
+
+  color = geography => {
+    if (this.props.data.temperature === undefined) {
       return "#ECEFF1";
     } else if (this.state.selected.id === geography.id) {
       return "#FF5722";
     } else {
-      return tempScale(this.props.data.temperatures[geography.properties.name])
+      // const dates = this.props.data.temperature.dates.map(s => Number(s.split('-')[0]));
+      // const rangeIndex = [dates.indexOf(this.props.range[0]), dates.indexOf(this.props.range[1])];
+      // const temps = this.props.data.temperature[geography.properties.name];
+      // const rangeTemps = temps === undefined ? undefined : temps.slice(rangeIndex[0], rangeIndex[1]);
+      // return tempScale(mean(rangeTemps));
+      const temp = this.props.data.temperature[geography.properties.name];
+      return tempScale(temp == undefined ? undefined : temp[0])
     }
   };
 
@@ -55,7 +64,7 @@ class Map extends Component {
       ...state,
       selected: geography,
       center: center(geography.geometry.coordinates),
-      zoom: 5,
+      zoom: 4,
     }));
   };
 
@@ -64,11 +73,13 @@ class Map extends Component {
     const deltaY = e.deltaY;
     this.setState(state => ({
       ...state,
-      zoom: Math.max(this.state.zoom * (deltaY < 0 ? 1.1 : 0.9), 1)
+      zoom: Math.max(this.state.zoom * (deltaY < 0 ? 1.1 : 0.9), 0.8)
     }));
   };
 
   render() {
+    const geographyPaths = topojson.feature(
+      this.props.geography, this.props.geography.objects.countries1).features;
     return (
       <div onWheel={this.zoom}>
         <Motion
@@ -86,7 +97,6 @@ class Map extends Component {
           {({zoom, x, y}) => (
             <ComposableMap
               projectionConfig={{scale: 200}}
-              width={1200} height={500}
               style={{width: "100%", height: "auto"}}
             >
               <ZoomableGroup center={[x, y]} zoom={zoom}
