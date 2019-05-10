@@ -1,6 +1,7 @@
 import React from 'react';
 import '@atlaskit/css-reset';
 import styled from 'styled-components';
+import * as d3 from 'd3';
 import Auxiliary from './auxiliary';
 import Timelines from './timelines';
 import Map from './imap';
@@ -71,6 +72,26 @@ const datasetList = [
   {id: 'sulfurpp', content: 'Sulfur Emissions (per person)'},
 ];
 
+const colors = {
+  temperature:['#00008b', /*'#e5e5f3',*/ '#ffffff', /*'#f7e8e8',*/ '#b22222'],
+  forestpercent: ['#ffffff', '#e8f3e8', '#228b22'],
+  foresttotal: ['#ffffff', '#e8f3e8', '#228b22'],
+  co2pp: ['#ffffff', '#f7e8e8', '#b22222'],
+  co2total: ['#ffffff', '#f7e8e8', '#b22222'],
+  sulfurpp: ['#ffffff', '#ffffe5', '#ffff00'],
+};
+
+const scale = (data, active) => {
+  const values = Object.values(data).slice(1).flat().sort();
+  const min = Math.min(...values.slice(values.length*0.25));
+  const max = Math.max(...values.slice(0, values.length*0.75));
+  const domain = [min, (max - min) / 2, max];
+  const scale = d3.scaleSymlog()
+    .domain(domain)
+    .range(colors[active]);
+  debugger;
+  return scale;
+};
 
 export default class App extends React.Component {
   constructor(props) {
@@ -110,6 +131,7 @@ export default class App extends React.Component {
             geography={geography}
             range={this.state.range}
             data={this.state.data}
+            scale={scale(this.state.data, this.state.active)}
             select={this.onRegionSelect}
             selected={this.state.region}
           />

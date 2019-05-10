@@ -8,14 +8,10 @@ import {
 import {Motion, spring} from 'react-motion';
 import * as topojson from 'topojson';
 import allcountries from './topojson/world-countries-sans-antarctica.json';
-import * as d3 from 'd3';
 
 const geographyPaths = topojson.feature(
   allcountries, allcountries.objects.countries1).features;
 
-const scale = d3.scaleLinear()
-  .domain([0, -20, 20])
-  .range(["#CFD8DC", "#607D8B", "#37474F"]);
 
 const center = (coordinates) => {
   const central = coordinates.length === 1
@@ -42,8 +38,7 @@ class Map extends Component {
     };
   }
 
-
-  color = geography => {
+  color = (geography, scale) => {
     if (this.props.data === undefined) {
       return "#ECEFF1";
     } else if (this.props.selected === geography.properties.name) {
@@ -55,7 +50,11 @@ class Map extends Component {
       // const rangeTemps = temps === undefined ? undefined : temps.slice(rangeIndex[0], rangeIndex[1]);
       // return tempScale(mean(rangeTemps));
       const data = this.props.data[geography.properties.name];
-      return scale(data == undefined ? undefined : data[0])
+      if (data === undefined) {
+        return "orange"; //"#ECEFF1";
+      } else {
+        return this.props.scale(data[data.length - 1])
+      }
     }
   };
 
@@ -80,6 +79,7 @@ class Map extends Component {
   render() {
     const geographyPaths = topojson.feature(
       this.props.geography, this.props.geography.objects.countries1).features;
+
     return (
       <div onWheel={this.zoom}>
         <Motion
