@@ -1,6 +1,4 @@
 import React from 'react';
-import * as d3 from 'd3';
-import styled from 'styled-components';
 import { Title } from './styles';
 
 export default class Auxiliary extends React.Component {
@@ -9,5 +7,5 @@ export default class Auxiliary extends React.Component {
     return (<>
       <Title>Auxiliary Views</Title>
     </>)
-  }
+}
 }

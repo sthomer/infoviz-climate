@@ -16,6 +16,11 @@ import co2pp from './data/co2_emissions_tonnes_per_person.json';
 import co2total from './data/yearly_co2_emissions_1000_tonnes.json';
 import sulfurpp from './data/sulfur_emissions_per_person_kg';
 
+import ForestPerctLineChart from './forestPerctLineChart.jsx';
+import CO2LineChart from './co2linechart.jsx';
+import PeopleAffectedLineChart from './peopleAffectedLineChart.jsx';
+import PeopleDeadLineChart from './peopleDeadLineChart.jsx';
+
 const Grid = styled.div`
   display: grid;
   overflow: hidden;
@@ -34,6 +39,7 @@ const Grid = styled.div`
 const AuxiliaryPane = styled.div`
   grid-area: auxiliary;
   border: 1px solid lightgrey;
+  overflow-y: scroll;
 `;
 
 const MapPane = styled.div`
@@ -123,8 +129,12 @@ export default class App extends React.Component {
   render() {
     return (<>
       <Grid>
-        <AuxiliaryPane>
+        <AuxiliaryPane >
           <Auxiliary/>
+          <ForestPerctLineChart region={this.state.region}/>
+          <CO2LineChart region={this.state.region}/>
+          <PeopleAffectedLineChart region={this.state.region}/>
+          <PeopleDeadLineChart region={this.state.region}/>
         </AuxiliaryPane>
         <MapPane>
           <Map
@@ -133,7 +143,7 @@ export default class App extends React.Component {
             data={this.state.data}
             scale={scale(this.state.data, this.state.active)}
             select={this.onRegionSelect}
-            selected={this.state.region}
+            selected={this.state.region}   
           />
         </MapPane>
         <TimelinesPane>
