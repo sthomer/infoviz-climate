@@ -8,30 +8,51 @@ import am4themes_animated from "@amcharts/amcharts4/themes/animated";
 
 am4core.useTheme(am4themes_animated);
 
+const colors = {
+  selected:am4core.color("#07BEB8"),
+  unselectedScroll:am4core.color("#ACACAC"),
+  unselectdItem: am4core.color("white"),
+  textSelected: am4core.color("white"),
+  textUnselected: am4core.color("black"),
+
+};
+
 export default class Timelines extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      selectedStartDate: undefined,
-      selectedendDate: undefined
-    };
-    var selectedComponent = undefined;
   }
 
-  updateDate(startDate, endDate){
-    console.log(startDate + " " + endDate)
-    // this.props.selectedDate = startDate;
-    // this.props.selectedDate = endDate;
-  }
-
-  updateDateString(str){
+  updateDateString(str, updateDate){
     const array = str.split(" ");
     let startDate = array[1]
     let endDate = array[3]
-    console.log(startDate + " " + endDate)
-    // this.props.selectedDate = startDate;
-    // this.props.selectedDate = endDate;
+    updateDate(startDate, endDate)
+  }
 
+  selectRange(scrollbarX, varObj, updateDateString, updateDate) {
+    scrollbarX.thumb.background.fill = colors.selected;
+    scrollbarX.thumb.background.fillOpacity = 0.3;
+    if(varObj.selectedComponent != undefined){
+      varObj.selectedComponent.background.fill = colors.unselectdItem;
+      varObj.selectedComponent.fill = colors.textUnselected;
+    }
+    updateDateString(scrollbarX.thumb.titleElement.textContent, updateDate);
+
+  }
+
+  selectDate(scrollbarX, varObj, ev, updateDate) {
+    if(varObj.selectedComponent != undefined){
+      varObj.selectedComponent.background.fill = colors.unselectdItem;
+      varObj.selectedComponent.fill = colors.textUnselected;
+    }
+    scrollbarX.thumb.background.fill = colors.unselectedScroll;
+    scrollbarX.thumb.background.fillOpacity = 0.4;
+
+    ev.target.background.fill = colors.selected;
+    ev.target.fill = colors.textSelected
+    ev.target.background.fillOpacity = 0.3;
+    updateDate(ev.target.text, ev.target.text)
+    varObj.selectedComponent = ev.target;
   }
 
   loadData() {
@@ -47,15 +68,10 @@ export default class Timelines extends React.Component {
   }
 
   componentDidMount() {
-    const updateDateBounds = this.updateDate
-    const updateDateBoundsString = this.updateDateString
-    var selectedComponent = undefined
-    var selectedDate = undefined
+    let varObj = {selectedComponent:undefined};
 
     let chart = am4core.create("chartdiv", am4charts.XYChart);
-
     chart.paddingRight = 20;
-
     chart.data = this.loadData();
 
     let dateAxis = chart.xAxes.push(new am4charts.DateAxis());
@@ -75,75 +91,51 @@ export default class Timelines extends React.Component {
 
     let scrollbarX = new am4charts.XYChartScrollbar();
     scrollbarX.series.push(series);
-    chart.scrollbarX = scrollbarX;
-
     scrollbarX.thumb.background.states.removeKey("hover");
     scrollbarX.thumb.background.states.removeKey("down");
-    scrollbarX.thumb.background.fill = am4core.color("#07BEB8");
-    scrollbarX.thumb.background.fillOpacity = 0.4;
+    scrollbarX.thumb.background.fill = colors.selected;
+    scrollbarX.thumb.background.fillOpacity = 0.3;
+    scrollbarX.thumb.events._listeners.splice(15, 1);
+    scrollbarX.background.events._listeners = []
+    chart.scrollbarX = scrollbarX;
+
+    const selectRange = this.selectRange
+    const updateDateString = this.updateDateString
+    const updateDate = this.props.updateDate
+    const selectDate = this.selectDate
+
     dateAxis.renderer.labels.template.events.on("hit", function(ev) {
-      if(selectedComponent != undefined){
-        selectedComponent.background.fill = am4core.color("white");
-        selectedComponent.fill = am4core.color("black");
-      }
-      scrollbarX.thumb.background.fill = am4core.color("#ACACAC");
-      scrollbarX.thumb.background.fillOpacity = 0.4;
-
-      ev.target.background.fill = am4core.color("#07BEB8");
-      ev.target.fill = am4core.color("white");
-      updateDateBounds(ev.target.text, ev.target.text)
-      selectedComponent = ev.target;
-      selectedDate = ev.target.text;
-    });
-
-    scrollbarX.events.on("rangechanged", function(ev) {
-      scrollbarX.thumb.background.fill = am4core.color("#07BEB8");
-      scrollbarX.thumb.background.fillOpacity = 0.4;
-
-      if(selectedComponent != undefined){
-        selectedComponent.background.fill = am4core.color("white");
-        selectedComponent.fill = am4core.color("black");
-        selectedComponent = undefined;
-      }
-      updateDateBoundsString(scrollbarX.thumb.titleElement.textContent);
-    });
-
-    scrollbarX.thumb.events.on("up", function(ev) {
-      scrollbarX.thumb.background.fill = am4core.color("#07BEB8");
-      scrollbarX.thumb.background.fillOpacity = 0.4;
-
-      if(selectedComponent != undefined){
-        selectedComponent.background.fill = am4core.color("white");
-        selectedComponent.fill = am4core.color("black");
-        selectedComponent = undefined;
-      }
-      updateDateBoundsString(scrollbarX.thumb.titleElement.textContent);
-    });
-
-
-    scrollbarX.scrollbarChart.events.on("up", function(ev) {
-      scrollbarX.thumb.background.fill = am4core.color("#07BEB8");
-      scrollbarX.thumb.group.node.children[0].fill = am4core.color("#07BEB8");
-      scrollbarX.thumb.background.fillOpacity = 0.3;
-      if(selectedComponent != undefined){
-        selectedComponent.background.fill = am4core.color("white");
-        selectedComponent.fill = am4core.color("black");
-      }
-      updateDateBoundsString(scrollbarX.thumb.titleElement.textContent);
+      selectDate(scrollbarX, varObj, ev, updateDate)
     });
 
     chart.plotContainer.events.on("up", function(ev) {
-      scrollbarX.thumb.background.fill = am4core.color("#07BEB8");
-      scrollbarX.thumb.group.node.children[0].fill = am4core.color("#07BEB8");
-      scrollbarX.thumb.background.fillOpacity = 0.3;
-      if(selectedComponent != undefined){
-        selectedComponent.background.fill = am4core.color("white");
-        selectedComponent.fill = am4core.color("black");
-      }
-      updateDateBoundsString(scrollbarX.thumb.titleElement.textContent);
+      console.log(ev)
+      selectRange(scrollbarX, varObj, updateDateString, updateDate)
     });
 
+    // scrollbarX.thumb.events.on("dragstop", function(ev) {
+    //   console.log(scrollbarX.thumb.titleElement.textContent)
+    // });
 
+    scrollbarX.chart.events.on("rangechanged", function(ev) {
+      selectRange(scrollbarX, varObj, updateDateString, updateDate);
+    });
+
+    scrollbarX.background.events.on("up", function(ev) {
+      selectRange(scrollbarX, varObj, updateDateString, updateDate);
+    });
+
+    scrollbarX.thumb.events.on("up", function(ev) {
+      selectRange(scrollbarX, varObj, updateDateString, updateDate);
+    });
+
+    scrollbarX.startGrip.events.on("up", function(ev) {
+      selectRange(scrollbarX, varObj, updateDateString, updateDate);
+    });
+
+    scrollbarX.endGrip.events.on("up", function(ev) {
+      selectRange(scrollbarX, varObj, updateDateString, updateDate);
+    });
 
     chart.chartCursor = false
     this.chart = chart;
