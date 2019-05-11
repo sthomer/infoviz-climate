@@ -45,17 +45,42 @@ def main():
 
 		csv_file.close()
 		
-
+		# Global Temp transformation
 		for elem in globalData:
 			elemSize = len(globalData[elem])
 			if elemSize < sizeVector:
-				globalData[elem] = ([0] * (sizeVector - elemSize)) + globalData[elem]
+				globalData[elem] = (["0"] * (sizeVector - elemSize - 1)) + globalData[elem]
 		
-		#for elem in globalData:
-		#	print(len(globalData[elem]))
+		dates = globalData["dates"]
+		tmpDates = []
+		for i in range(0, len(dates), 12):
+			tmpDates += [dates[i][:4]]
+		globalData["dates"] = tmpDates
 
-		with open(outputFile, "w") as jsonFile:
-			json.dump(globalData, jsonFile)	
+		for elem in globalData:
+			if elem != "dates":
+				temps = globalData[elem]
+				meanTemp = []
+				for i in range(0, len(temps), 12):
+					tmp = []
+					for j in range(12):
+						if i+j < len(temps):
+							if temps[i+j] == "":
+								tmp += [0]
+							else:
+								tmp += [float(temps[i+j])]
+					mean = sum(tmp) / 12
+					meanTemp += [mean]
+				globalData[elem] = meanTemp
+
+		for elem in globalData:
+			print(len(globalData[elem]))
+
+		#with open(outputFile, "w") as jsonFile:
+		#	json.dump(globalData, jsonFile)	
+
+
+
 
 if __name__ == '__main__':
   main()
