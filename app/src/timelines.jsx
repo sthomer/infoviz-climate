@@ -22,14 +22,6 @@ export default class Timelines extends React.Component {
     super(props);
   }
 
-  updateDate = (startDate, endDate) => {
-    console.log(startDate, endDate)
-    this.setState(state => ({
-      ...state,
-      range: [startDate, endDate]
-    }));
-  };
-
   updateDateString(str, updateDate){
     const array = str.split(" ");
     let startDate = array[1]
@@ -109,7 +101,7 @@ export default class Timelines extends React.Component {
 
     const selectRange = this.selectRange
     const updateDateString = this.updateDateString
-    const updateDate = this.updateDate
+    const updateDate = this.props.updateDate
     const selectDate = this.selectDate
 
     dateAxis.renderer.labels.template.events.on("hit", function(ev) {

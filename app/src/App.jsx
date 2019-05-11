@@ -25,9 +25,9 @@ const Grid = styled.div`
   align-content: center;
   grid-template-rows: 60vh 40vh;
   grid-template-columns: 25vw 75vw;
-  grid-template-areas: 
+  grid-template-areas:
     "auxiliary map"
-    "auxiliary timeline"; 
+    "auxiliary timeline";
   grid-gap: 2px;
 `;
 
@@ -120,6 +120,14 @@ export default class App extends React.Component {
     year: year,
   }));
 
+  updateDate = (startDate, endDate) => {
+    let range = [startDate, endDate];
+    this.setState(state => ({
+      ...state,
+      range: range,
+    }));
+  };
+
   render() {
     return (<>
       <Grid>
@@ -140,6 +148,7 @@ export default class App extends React.Component {
           <Timelines
             range={this.state.range}
             select={this.onRangeSelect}
+            updateDate = {this.updateDate}
           />
         </TimelinesPane>
       </Grid>
