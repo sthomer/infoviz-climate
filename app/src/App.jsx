@@ -138,7 +138,7 @@ export default class App extends React.Component {
     return (<>
       <Grid>
         <AuxiliaryPane >
-          <Auxiliary/>
+          <Auxiliary region={this.state.region}/>
           <ForestPerctLineChart region={this.state.region}/>
           <CO2LineChart region={this.state.region}/>
           <PeopleAffectedLineChart region={this.state.region}/>

@@ -5,7 +5,7 @@ export default class Auxiliary extends React.Component {
 
   render() {
     return (<>
-      <Title>Auxiliary Views</Title>
+      <Title>{this.props.region}</Title>
     </>)
 }
 }
