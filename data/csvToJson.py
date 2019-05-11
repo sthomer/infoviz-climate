@@ -2,6 +2,13 @@ import csv
 import json
 import sys
 
+countriesName = {	"United States" : "United States of America",
+					"Congo, Dem. Rep." : "Democratic Republic of the Congo",
+					"Congo, Rep." : "Republic of the Congo",
+					"Tanzania" : "United Republic of Tanzania",
+					"Guinea-Bissau" : "Guinea Bissau",
+					"Serbia" : "Republic of Serbia"}
+
 def main():
 	globalData = {}
 	sizeVector = 2566
@@ -27,7 +34,10 @@ def main():
 					line_count += 1
 
 				else:
-					name = row[0]
+					if row[0] in countriesName:
+						name = countriesName[row[0]]
+					else:
+						name = row[0]
 					dataTemp = row[1:]
 
 
@@ -41,8 +51,8 @@ def main():
 			if elemSize < sizeVector:
 				globalData[elem] = ([0] * (sizeVector - elemSize)) + globalData[elem]
 		
-		for elem in globalData:
-			print(len(globalData[elem]))
+		#for elem in globalData:
+		#	print(len(globalData[elem]))
 
 		with open(outputFile, "w") as jsonFile:
 			json.dump(globalData, jsonFile)	
