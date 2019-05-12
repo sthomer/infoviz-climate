@@ -41,7 +41,7 @@ class Map extends Component {
   color = (geography, scale) => {
     if (this.props.data === undefined) {
       return "#ECEFF1";
-    } else if (this.props.selected === geography.properties.name) {
+    } else if (this.props.region === geography.properties.name) {
       return "#FF5722";
     } else {
       // const dates = this.props.data.temperature.dates.map(s => Number(s.split('-')[0]));
@@ -63,7 +63,7 @@ class Map extends Component {
     this.setState(state => ({
       ...state,
       center: center(geography.geometry.coordinates),
-      zoom: 4,
+      zoom: 3,
     }));
   };
 

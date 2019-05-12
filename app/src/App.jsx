@@ -39,26 +39,23 @@ const Grid = styled.div`
 
 const AuxiliaryPane = styled.div`
   grid-area: auxiliary;
-  border: 1px solid lightgrey;
-  overflow-y: scroll;
 `;
 
 const MapPane = styled.div`
   grid-area: map;
-  border: 1px solid lightgrey;
   overflow: hidden;
+  position: relative;
 `;
 
 const TimelinesPane = styled.div`
   grid-area: timeline;
-  border: 1px solid lightgrey;
 `;
 
 const Floating = styled.div`
-  position: fixed;
+  position: absolute;
   z-index: 100;
-  top: 8px;
-  right: 8px;
+  ${props => props.position}: 0px;
+  right: 0px;
 `;
 
 const datasets = {
@@ -80,7 +77,7 @@ const datasetList = [
 ];
 
 const colors = {
-  temperature:['#00008b', /*'#e5e5f3',*/ '#ffffff', /*'#f7e8e8',*/ '#b22222'],
+  temperature: ['#00008b', /*'#e5e5f3',*/ '#ffffff', /*'#f7e8e8',*/ '#b22222'],
   forestpercent: ['#ffffff', '#e8f3e8', '#228b22'],
   foresttotal: ['#ffffff', '#e8f3e8', '#228b22'],
   co2pp: ['#ffffff', '#f7e8e8', '#b22222'],
@@ -90,8 +87,8 @@ const colors = {
 
 const scale = (data, active) => {
   const values = Object.values(data).slice(1).flat().sort();
-  const min = Math.min(...values.slice(values.length*0.25));
-  const max = Math.max(...values.slice(0, values.length*0.75));
+  const min = Math.min(...values.slice(values.length * 0.25));
+  const max = Math.max(...values.slice(0, values.length * 0.75));
   const domain = [min, (max - min) / 2, max];
   const scale = d3.scaleSymlog()
     .domain(domain)
@@ -104,10 +101,12 @@ export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: datasets['forestpercent'],
+      region: undefined,
       range: [1970, 2000],
-      active: 'forestpercent',
-      region: '',
+      activePrimary: 'forestpercent',
+      dataPrimary: datasets['forestpercent'],
+      activeSecondary: 'foresttotal',
+      dataSecondary: datasets['foresttotal'],
     }
   }
 
@@ -116,62 +115,75 @@ export default class App extends React.Component {
     region: region,
   }));
 
-  onDataSelect = data => this.setState(state => ({
-    ...state,
-    active: data,
-    data: datasets[data],
-  }));
-
-  onYearSelect = year => this.setState(state => ({
-    ...state,
-    year: year,
-  }));
-
-  updateDate = (startDate, endDate) => {
-    let range = [startDate, endDate];
+  onRangeSelect = (startDate, endDate) => {
     this.setState(state => ({
       ...state,
-      range: range,
+      range: [startDate, endDate],
     }));
   };
+
+  onPrimarySelect = data => this.setState(state => ({
+    ...state,
+    activePrimary: data,
+    dataPrimary: datasets[data],
+  }));
+
+  onSecondarySelect = data => this.setState(state => ({
+    ...state,
+    activeSecondary: data,
+    dataSecondary: datasets[data],
+  }));
 
   render() {
     return (<>
       <Grid>
-        <AuxiliaryPane >
-          <Auxiliary region={this.state.region}/>
-          <TempLineChart region={this.state.region}/>
-          <ForestPerctLineChart region={this.state.region}/>
-          <CO2LineChart region={this.state.region}/>
-          <PeopleAffectedLineChart region={this.state.region}/>
-          <PeopleDeadLineChart region={this.state.region}/>
+        <AuxiliaryPane>
+          <Auxiliary
+            region={this.state.region}
+            range={this.state.range}
+            primary={this.state.dataPrimary}
+            secondary={this.state.dataSecondary}
+          />
         </AuxiliaryPane>
         <MapPane>
           <Map
             geography={geography}
+            region={this.state.region}
             range={this.state.range}
-            data={this.state.data}
-            scale={scale(this.state.data, this.state.active)}
+            data={this.state.dataPrimary}
+            scale={scale(this.state.dataPrimary, this.state.activePrimary)}
             select={this.onRegionSelect}
-            selected={this.state.region}   
           />
+          <Floating position={'top'}>
+            <Menu
+              key={'primary'}
+              select={this.onPrimarySelect}
+              items={datasetList}
+              active={this.state.activePrimary}
+              direction={'down'}
+            />
+          </Floating>
+          <Floating position={'bottom'}>
+            <Menu
+              key={'secondary'}
+              select={this.onSecondarySelect}
+              items={datasetList}
+              active={this.state.activeSecondary}
+              direction={'up'}
+            />
+          </Floating>
         </MapPane>
         <TimelinesPane>
           <Timelines
+            primary={this.state.dataPrimary}
+            secondary={this.state.dataSecondary}
             range={this.state.range}
-            select={this.onRangeSelect}
-            updateDate={this.updateDate}
+            updateDate={this.onRangeSelect}
             region={this.state.region}
           />
         </TimelinesPane>
       </Grid>
-      <Floating>
-        <Menu
-          select={this.onDataSelect}
-          items={datasetList}
-          active={this.state.active}
-        />
-      </Floating>
-    </>);
+    </>
+  );
   }
-}
+  }
