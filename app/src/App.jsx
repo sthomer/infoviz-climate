@@ -20,6 +20,7 @@ import ForestPerctLineChart from './forestPerctLineChart.jsx';
 import CO2LineChart from './co2linechart.jsx';
 import PeopleAffectedLineChart from './peopleAffectedLineChart.jsx';
 import PeopleDeadLineChart from './peopleDeadLineChart.jsx';
+import TempLineChart from './tempLineChart.jsx';
 
 const Grid = styled.div`
   display: grid;
@@ -139,6 +140,7 @@ export default class App extends React.Component {
       <Grid>
         <AuxiliaryPane >
           <Auxiliary region={this.state.region}/>
+          <TempLineChart region={this.state.region}/>
           <ForestPerctLineChart region={this.state.region}/>
           <CO2LineChart region={this.state.region}/>
           <PeopleAffectedLineChart region={this.state.region}/>
