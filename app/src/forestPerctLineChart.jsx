@@ -36,7 +36,7 @@ export default class ForestPerctLineChart extends React.Component {
     // console.log(countryName)
     //modifies the state variable to the countryName
     this.state.region = countryName
-    debugger
+
 
 
     //create the data array for the ReactChartkick

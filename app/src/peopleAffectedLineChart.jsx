@@ -20,6 +20,7 @@ export default class PeopleAffectedLineChart extends React.Component {
     }
   }
   render() {
+    
 
     //get the dates from the json file
     // console.log(data)
@@ -33,7 +34,7 @@ export default class PeopleAffectedLineChart extends React.Component {
       return (<>
       </>)
     }
-    debugger
+    
 
     return (<>
       <LineChart data={

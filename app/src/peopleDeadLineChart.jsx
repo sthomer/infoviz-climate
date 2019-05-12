@@ -33,7 +33,7 @@ export default class PeopleDeadLineChart extends React.Component {
       return (<>
       </>)
     }
-    debugger
+    
 
     return (<>
       <LineChart data={

@@ -160,7 +160,8 @@ export default class App extends React.Component {
           <Timelines
             range={this.state.range}
             select={this.onRangeSelect}
-            updateDate = {this.updateDate}
+            updateDate={this.updateDate}
+            region={this.state.region}
           />
         </TimelinesPane>
       </Grid>
