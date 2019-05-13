@@ -96,7 +96,7 @@ class Map extends Component {
       data[region] = values.reduce((x, y) => Number(x) + Number(y)) / values.length
     });
 
-    const values = Object.values(data).flat().sort();
+    const values = Object.values(data).sort((x, y) => x - y);
     const min = Math.min(...values.slice(values.length * 0.05));
     const max = Math.max(...values.slice(0, values.length * 0.95));
     const scale = d3.scaleSymlog()
