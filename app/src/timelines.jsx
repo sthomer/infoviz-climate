@@ -4,8 +4,7 @@ import styled from 'styled-components';
 import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";
 import am4themes_animated from "@amcharts/amcharts4/themes/animated";
-import forestCoverage from "./data/forest_coverage_percent.json";
-import co2emission from "./data/co2_emissions_tonnes_per_person.json";
+
 
 am4core.useTheme(am4themes_animated);
 
