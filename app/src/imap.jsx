@@ -6,12 +6,12 @@ import {
   Geography,
 } from "react-simple-maps";
 import {Motion, spring} from 'react-motion';
+import * as d3 from 'd3';
 import * as topojson from 'topojson';
 import allcountries from './topojson/world-countries-sans-antarctica.json';
 
 const geographyPaths = topojson.feature(
   allcountries, allcountries.objects.countries1).features;
-
 
 const center = (coordinates) => {
   const central = coordinates.length === 1
@@ -28,6 +28,15 @@ const center = (coordinates) => {
 const mean = ns => ns === undefined ? undefined
   : ns.reduce((x, y) => Number(x) + Number(y)) / ns.length;
 
+const colors = {
+  temperature: ['#00008b', /*'#e5e5f3',*/ '#ffffff', /*'#f7e8e8',*/ '#b22222'],
+  forestpercent: ['#ffffff', '#e8f3e8', '#228b22'],
+  foresttotal: ['#ffffff', '#e8f3e8', '#228b22'],
+  co2pp: ['#ffffff', '#f7e8e8', '#b22222'],
+  co2total: ['#ffffff', '#f7e8e8', '#b22222'],
+  sulfurpp: ['#ffffff', '#ffffe5', '#ffff00'],
+};
+
 class Map extends Component {
   constructor(props) {
     super(props);
@@ -38,22 +47,15 @@ class Map extends Component {
     };
   }
 
-  color = (geography, scale) => {
+  color = (data, scale, geography) => {
     if (this.props.data === undefined) {
       return "#ECEFF1";
-    } else if (this.props.region === geography.properties.name) {
-      return "#FF5722";
     } else {
-      // const dates = this.props.data.temperature.dates.map(s => Number(s.split('-')[0]));
-      // const rangeIndex = [dates.indexOf(this.props.range[0]), dates.indexOf(this.props.range[1])];
-      // const temps = this.props.data.temperature[geography.properties.name];
-      // const rangeTemps = temps === undefined ? undefined : temps.slice(rangeIndex[0], rangeIndex[1]);
-      // return tempScale(mean(rangeTemps));
-      const data = this.props.data[geography.properties.name];
-      if (data === undefined) {
-        return "orange"; //"#ECEFF1";
+      const value = data[geography.properties.name];
+      if (value === undefined) {
+        return "#ECEFF1";
       } else {
-        return this.props.scale(data[data.length - 1])
+        return scale(value)
       }
     }
   };
@@ -79,6 +81,28 @@ class Map extends Component {
   render() {
     const geographyPaths = topojson.feature(
       this.props.geography, this.props.geography.objects.countries1).features;
+
+    const range = [
+      this.props.data.dates.indexOf(this.props.range[0]),
+      this.props.data.dates.indexOf(this.props.range[1])
+      ];
+    range[0] = range[0] >= 0 ? range[0] : 0;
+    range[1] = range[1] >= 0 ? range[1] : this.props.data.dates.length;
+    // TODO: Set range state of App?
+
+    const data = {};
+    Object.keys(this.props.data).slice(1).map(region => {
+      const values = this.props.data[region].slice(range[0], range[1]);
+      data[region] = values.reduce((x, y) => Number(x) + Number(y)) / values.length
+    });
+
+    const values = Object.values(data).flat().sort();
+    const min = Math.min(...values.slice(values.length * 0.05));
+    const max = Math.max(...values.slice(0, values.length * 0.95));
+    const scale = d3.scaleSymlog()
+      .domain([min, (max - min) / 2, max])
+      .range(colors[this.props.active])
+      .clamp(true);
 
     return (
       <div onWheel={this.zoom}>
@@ -113,13 +137,13 @@ class Map extends Component {
                       onClick={this.select}
                       style={{
                         default: {
-                          fill: this.color(geography),
+                          fill: this.color(data, scale, geography),
                           stroke: "#607D8B",
                           strokeWidth: 0.75,
                           outline: "none",
                         },
                         hover: {
-                          fill: this.color(geography),
+                          fill: this.color(data, scale, geography),
                           stroke: "#607D8B",
                           strokeWidth: 0.75,
                           outline: "none",

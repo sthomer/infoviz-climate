@@ -9,7 +9,7 @@ import Menu from './menu';
 
 import geography from './topojson/world-countries-sans-antarctica.json';
 
-import temperature from './data/GlobalTempByCountryFrom1800.json';
+import temperature from './data/GlobalTempByCountryFrom1800-mean.json';
 import forestpercent from './data/forest_coverage_percent.json';
 import foresttotal from './data/forest_land_total_area_ha';
 import co2pp from './data/co2_emissions_tonnes_per_person.json';
@@ -20,7 +20,6 @@ import ForestPerctLineChart from './forestPerctLineChart.jsx';
 import CO2LineChart from './co2linechart.jsx';
 import PeopleAffectedLineChart from './peopleAffectedLineChart.jsx';
 import PeopleDeadLineChart from './peopleDeadLineChart.jsx';
-import TempLineChart from './tempLineChart.jsx';
 
 const Grid = styled.div`
   display: grid;
@@ -76,33 +75,12 @@ const datasetList = [
   {id: 'sulfurpp', content: 'Sulfur Emissions (per person)'},
 ];
 
-const colors = {
-  temperature: ['#00008b', /*'#e5e5f3',*/ '#ffffff', /*'#f7e8e8',*/ '#b22222'],
-  forestpercent: ['#ffffff', '#e8f3e8', '#228b22'],
-  foresttotal: ['#ffffff', '#e8f3e8', '#228b22'],
-  co2pp: ['#ffffff', '#f7e8e8', '#b22222'],
-  co2total: ['#ffffff', '#f7e8e8', '#b22222'],
-  sulfurpp: ['#ffffff', '#ffffe5', '#ffff00'],
-};
-
-const scale = (data, active) => {
-  const values = Object.values(data).slice(1).flat().sort();
-  const min = Math.min(...values.slice(values.length * 0.25));
-  const max = Math.max(...values.slice(0, values.length * 0.75));
-  const domain = [min, (max - min) / 2, max];
-  const scale = d3.scaleSymlog()
-    .domain(domain)
-    .range(colors[active]);
-  debugger;
-  return scale;
-};
-
 export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       region: undefined,
-      range: [1970, 2000],
+      range: ["1970", "2000"],
       activePrimary: 'forestpercent',
       dataPrimary: datasets['forestpercent'],
       activeSecondary: 'foresttotal',
@@ -150,8 +128,8 @@ export default class App extends React.Component {
             geography={geography}
             region={this.state.region}
             range={this.state.range}
+            active={this.state.activePrimary}
             data={this.state.dataPrimary}
-            scale={scale(this.state.dataPrimary, this.state.activePrimary)}
             select={this.onRegionSelect}
           />
           <Floating position={'top'}>
