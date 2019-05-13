@@ -4,6 +4,8 @@ import styled from 'styled-components';
 import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";
 import am4themes_animated from "@amcharts/amcharts4/themes/animated";
+import forestCoverage from "./data/forest_coverage_percent.json";
+import co2emission from "./data/co2_emissions_tonnes_per_person.json";
 
 am4core.useTheme(am4themes_animated);
 
@@ -50,9 +52,35 @@ export default class Timelines extends React.Component {
     varObj.selectedComponent = ev.target;
   };
 
+  //primaryDatasetValue and secondaryDatasetValue can be considered as keys for the each series
+  //see line 125 : series2.dataFields.valueY = "secondaryDatasetValue"; 
+  //and line 118 : series.dataFields.valueY = "primaryDatasetValue";
   loadData = () => this.props.region === undefined ? undefined :
       this.props.primary.dates.map((date, i) =>
-        ({date: date, value: this.props.primary[this.props.region][i]}));
+        (
+          { 
+          date: date, 
+          primaryDatasetValue: this.props.primary[this.props.region][i], 
+          secondaryDatasetValue: this.props.secondary[this.props.region][i] 
+          }
+        ));
+
+  // loadData() {
+  //   let data = []
+    
+  //   if (this.props.region !== undefined) {
+  //     let cdates = this.props.primary.dates  
+  //     let fdates = this.props.secondary.dates
+  //     let len = Math.max(cdates.length,fdates.length)
+  //     let primaryDValue = this.props.primary[this.props.region]
+  //     let secondaryDValue = this.props.secondary[this.props.region]
+  //     for (let i = 1; i < len; i++) 
+  //         data.push({ date: cdates[i], primaryDatasetValue: primaryDValue[i], secondaryDatasetValue: secondaryDValue[i] });
+  //     this.state.region = this.props.region
+  //   }
+  //   return data
+
+  // }
 
   componentDidUpdate(prevProps) {
     if (
@@ -65,24 +93,42 @@ export default class Timelines extends React.Component {
   }
 
   componentDidMount() {
-    let varObj = {selectedComponent: undefined};
+    let varObj = { selectedComponent: undefined };
 
     const chart = am4core.create("chartdiv", am4charts.XYChart);
     chart.data = this.loadData();
 
-    const dateAxis = chart.xAxes.push(new am4charts.DateAxis());
+
+    const dateAxis = chart.xAxes.push(new am4charts.CategoryAxis());
+    dateAxis.dataFields.category = "date";
     dateAxis.renderer.grid.template.location = 0;
 
-    const valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
-    valueAxis.tooltip.disabled = true;
-    // valueAxis.renderer.minWidth = 35;
-    valueAxis.title.text = 'Depends on Dataset'; //'°C'
-
-    const series = chart.series.push(new am4charts.LineSeries());
-    series.dataFields.dateX = "date";
-    series.dataFields.valueY = "value";
-    series.tooltipText = "{valueY.value}";
     chart.cursor = new am4charts.XYCursor();
+
+    // First value axis
+    let valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+    valueAxis.title.text = "primary dataset";
+
+    // Second value axis
+    let valueAxis2 = chart.yAxes.push(new am4charts.ValueAxis());
+    valueAxis2.title.text = "secondary dataset";
+    valueAxis2.renderer.opposite = true;
+
+    // First series
+    let series = chart.series.push(new am4charts.ColumnSeries());
+    series.dataFields.valueY = "primaryDatasetValue";
+    series.dataFields.categoryX = "date";
+    series.name = "first dataset";
+    series.tooltipText = "{name}: [bold]{valueY}[/]";
+
+    // Second series
+    let series2 = chart.series.push(new am4charts.LineSeries());
+    series2.dataFields.valueY = "secondaryDatasetValue";
+    series2.dataFields.categoryX = "date";
+    series2.name = "secondary dataset";
+    series2.tooltipText = "{name}: [bold]{valueY}[/]";
+    series2.strokeWidth = 3;
+    series2.yAxis = valueAxis2;
 
     dateAxis.renderer.labels.template.cursorOverStyle = am4core.MouseCursorStyle.pointer;
 
@@ -141,7 +187,7 @@ export default class Timelines extends React.Component {
 
   render() {
     return (
-      <div id="chartdiv" style={{width: "100%", height: "100%"}}/>
+      <div id="chartdiv" style={{ width: "100%", height: "100%" }} />
     );
   }
 }
