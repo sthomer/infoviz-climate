@@ -74,7 +74,7 @@ hoverState.properties.fillOpacity = 1;
 
   render() {
     return (
-      <div id="chartdivBis" style={{ width: "100%", height: "100%" }} />
+      <div id="chartdivBis" style={{ width: "100%", height: "50%" }} />
     );
   }
 }
