@@ -124,6 +124,9 @@ export default class App extends React.Component {
             range={this.state.range}
             primary={this.state.dataPrimary}
             secondary={this.state.dataSecondary}
+            datasetList={datasetList}
+            activePrimary={this.state.activePrimary}
+            activeSecondary={this.state.activeSecondary}
           />
         </AuxiliaryPane>
         <MapPane>

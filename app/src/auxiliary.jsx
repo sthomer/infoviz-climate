@@ -6,7 +6,71 @@ import * as am4charts from "@amcharts/amcharts4/charts";
 import am4themes_animated from "@amcharts/amcharts4/themes/animated";
 import * as am4plugins_regression from "@amcharts/amcharts4/plugins/regression";
 
+
 am4core.useTheme(am4themes_animated);
+
+function findLineByLeastSquares( values_x, values_y ) {
+  var sum_x = 0;
+  var sum_y = 0;
+  var sum_xy = 0;
+  var sum_xx = 0;
+  var count = 0;
+
+  /*
+   * We'll use those variables for faster read/write access.
+   */
+  var x = 0;
+  var y = 0;
+  var values_length = values_x.length;
+
+  if ( values_length != values_y.length ) {
+    throw new Error( 'The parameters values_x and values_y need to have same size!' );
+  }
+
+  /*
+   * Nothing to do.
+   */
+  if ( values_length === 0 ) {
+    return [
+      [],
+      []
+    ];
+  }
+
+  /*
+   * Calculate the sum for each of the parts necessary.
+   */
+  for ( var v = 0; v < values_length; v++ ) {
+    x = parseFloat(values_x[ v ]);
+    y = parseFloat(values_y[ v ]);
+    sum_x += x;
+    sum_y += y;
+    sum_xx += x * x;
+    sum_xy += x * y;
+    count++;
+  }
+
+  /*
+   * Calculate m and b for the formular:
+   * y = x * m + b
+   */
+  var m = ( count * sum_xy - sum_x * sum_y ) / ( count * sum_xx - sum_x * sum_x );
+  var b = ( sum_y / count ) - ( m * sum_x ) / count;
+  /*
+   * We will make the x and y result line now
+   */
+  var result_values_x = [];
+  var result_values_y = [];
+
+  for ( var v = 0; v < values_length; v++ ) {
+    x = values_x[ v ];
+    y = x * m + b;
+    result_values_x.push( x );
+    result_values_y.push( y );
+  }
+
+  return [ result_values_x, result_values_y ];
+}
 
 export default class Auxiliary extends React.Component {
 
@@ -15,7 +79,9 @@ export default class Auxiliary extends React.Component {
   (
     {
       primaryDatasetValue: this.props.primary[this.props.region][i],
-      secondaryDatasetValue: this.props.secondary[this.props.region][i]
+      secondaryDatasetValue: this.props.secondary[this.props.region][i],
+      primaryReg: this.props.primary[this.props.region][i],
+      secondaryReg: this.props.secondary[this.props.region][i]
     }
   ));
 
@@ -23,35 +89,58 @@ export default class Auxiliary extends React.Component {
     if (
       prevProps.region !== this.props.region ||
       prevProps.primary !== this.props.primary ||
-      prevProps.secondary !== this.props.secondary) {
+      prevProps.secondary !== this.props.secondary)
+    {
       this.chart.data = this.loadData()
-      if (this.chart.data.length > 1) {
-        const lastInedex = this.chart.data.length-1;
-        this.trend.data = [
-          { "primaryDatasetValue": this.chart.data[0].primaryDatasetValue,
-            "secondaryDatasetValue": this.chart.data[0].secondaryDatasetValue },
-          { "primaryDatasetValue": this.chart.data[lastInedex].primaryDatasetValue,
-            "secondaryDatasetValue": this.chart.data[lastInedex].secondaryDatasetValue }];
-        }
-        console.log(this.chart.data)
-        console.log(this.trend.data)
+      console.log(this.chart.data)
+      this.regression()
     }
   }
 
+  regression() {
+    if(this.chart.data !== undefined)
+    {
+      let x = this.chart.data.map(point=> point.primaryDatasetValue);
+      let y = this.chart.data.map(point=> point.secondaryDatasetValue);
+      let regression = findLineByLeastSquares(x,y);
+      this.chart.data = this.chart.data.map(function(point,i) {
+        return (
+          {
+            primaryDatasetValue: point.primaryDatasetValue,
+            secondaryDatasetValue: point.secondaryDatasetValue,
+            primaryReg: regression[0][i],
+            secondaryReg: regression[1][i]+""
+          })
+      });
+
+      this.valueAxisX.title.text = this.props.datasetList.find(dataset =>
+        {return dataset.id == this.props.activePrimary
+        }).content;
+      this.valueAxisY.title.text = this.props.datasetList.find(dataset =>
+        {return dataset.id == this.props.activeSecondary
+        }).content;
+    }
+  }
+
+
+
   componentDidMount() {
   let chart = am4core.create("scatterdiv", am4charts.XYChart);
-
+  this.chart = chart;
   chart.data = this.loadData();
-  console.log(this.loadData())
 
   // Create axes
   let valueAxisX = chart.xAxes.push(new am4charts.ValueAxis());
   valueAxisX.title.text = 'X Axis';
   valueAxisX.renderer.minGridDistance = 40;
+  this.valueAxisX = valueAxisX
 
   // Create value axis
   let valueAxisY = chart.yAxes.push(new am4charts.ValueAxis());
   valueAxisY.title.text = 'Y Axis';
+  this.valueAxisY = valueAxisY
+
+  this.regression()
 
   let series = chart.series.push(new am4charts.LineSeries());
   series.dataFields.valueX = "primaryDatasetValue";
@@ -65,27 +154,12 @@ export default class Auxiliary extends React.Component {
   bullet.propertyFields.fillOpacity = "opacity";
   bullet.propertyFields.strokeOpacity = "opacity";
 
-  let trend = chart.series.push(new am4charts.LineSeries());
-  trend.dataFields.valueY = "secondaryDatasetValue";
-  trend.dataFields.valueX = "primaryDatasetValue";
-  trend.strokeWidth = 2
-  trend.stroke = chart.colors.getIndex(0);
-  trend.strokeOpacity = 0.7;
 
-  var regseries = chart.series.push(new am4charts.LineSeries());
-  regseries.dataFields.valueY = "secondaryDatasetValue";
-  regseries.dataFields.valueX = "primaryDatasetValue";
-  regseries.strokeWidth = 2;
-  regseries.name = "Polynomial Regression";
-  regseries.tensionX = 0.8;
-  regseries.tensionY = 0.8;
-
-  var reg = regseries.plugins.push(new am4plugins_regression.Regression());
-  reg.method = "linear";
-  reg.simplify = true;
-
-  this.chart = chart;
-  this.trend = trend;
+  let lineSeries = chart.series.push(new am4charts.LineSeries());
+  lineSeries.dataFields.valueX = "primaryReg";
+  lineSeries.dataFields.valueY = "secondaryReg";
+  lineSeries.stroke = am4core.color("#00008b");
+  lineSeries.strokeWidth = 2;
 
   }
 
