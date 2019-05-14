@@ -52,28 +52,28 @@ export default class Timelines extends React.Component {
   };
 
   //primaryDatasetValue and secondaryDatasetValue can be considered as keys for the each series
-  //see line 125 : series2.dataFields.valueY = "secondaryDatasetValue"; 
+  //see line 125 : series2.dataFields.valueY = "secondaryDatasetValue";
   //and line 118 : series.dataFields.valueY = "primaryDatasetValue";
   loadData = () => this.props.region === undefined ? undefined :
       this.props.primary.dates.map((date, i) =>
         (
-          { 
-          date: date, 
-          primaryDatasetValue: this.props.primary[this.props.region][i], 
-          secondaryDatasetValue: this.props.secondary[this.props.region][i] 
+          {
+          date: date,
+          primaryDatasetValue: this.props.primary[this.props.region][i],
+          secondaryDatasetValue: this.props.secondary[this.props.region][i]
           }
         ));
 
   // loadData() {
   //   let data = []
-    
+
   //   if (this.props.region !== undefined) {
-  //     let cdates = this.props.primary.dates  
+  //     let cdates = this.props.primary.dates
   //     let fdates = this.props.secondary.dates
   //     let len = Math.max(cdates.length,fdates.length)
   //     let primaryDValue = this.props.primary[this.props.region]
   //     let secondaryDValue = this.props.secondary[this.props.region]
-  //     for (let i = 1; i < len; i++) 
+  //     for (let i = 1; i < len; i++)
   //         data.push({ date: cdates[i], primaryDatasetValue: primaryDValue[i], secondaryDatasetValue: secondaryDValue[i] });
   //     this.state.region = this.props.region
   //   }
@@ -102,7 +102,7 @@ export default class Timelines extends React.Component {
     dateAxis.dataFields.category = "date";
     dateAxis.renderer.grid.template.location = 0;
 
-    chart.cursor = new am4charts.XYCursor();
+    chart.zoomOutButton.disabled = true;
 
     // First value axis
     let valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
