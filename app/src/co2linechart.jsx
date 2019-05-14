@@ -26,7 +26,7 @@ export default class CO2LineChart extends React.Component {
     let dates = co2emission.dates
     //get the country name when we click on the map file
     let countryName = this.props.region
-    
+
     if (countryName == '') {
       //return an empty page
       return (<>
@@ -36,11 +36,11 @@ export default class CO2LineChart extends React.Component {
     // console.log(countryName)
     //modifies the state variable to the countryName
     this.state.region = countryName
-    
+
 
 
     //create the data array for the ReactChartkick
-    //it is based on the form of array of arrays 
+    //it is based on the form of array of arrays
     // [ [1990,23],[1991,21]]
     // let forestDataArray = []
     let co2DataArray = []

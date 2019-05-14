@@ -21,6 +21,8 @@ import CO2LineChart from './co2linechart.jsx';
 import PeopleAffectedLineChart from './peopleAffectedLineChart.jsx';
 import PeopleDeadLineChart from './peopleDeadLineChart.jsx';
 
+import CO2BarChart from './co2_world_barChart.jsx'
+
 const Grid = styled.div`
   display: grid;
   overflow: hidden;
@@ -116,6 +118,7 @@ export default class App extends React.Component {
     return (<>
       <Grid>
         <AuxiliaryPane>
+          <CO2BarChart/>
           <Auxiliary
             region={this.state.region}
             range={this.state.range}
