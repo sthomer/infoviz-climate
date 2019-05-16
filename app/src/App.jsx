@@ -8,6 +8,7 @@ import Map from './imap';
 import Menu from './menu';
 import Slider from './slider';
 import Timeline from './timeline';
+import Doublebar from './doublebar';
 
 import geography from './topojson/world-countries-sans-antarctica.json';
 
@@ -70,31 +71,37 @@ const datasets = {
   sulfurpp: sulfurpp,
 };
 
-const datasetList = [
-  {id: 'temperature', content: 'Average Temperature'},
-  {id: 'forestpercent', content: 'Forest Coverage (%)'},
-  {id: 'foresttotal', content: 'Forest Coverage (total)'},
-  {id: 'co2pp', content: 'CO2 Emission (per person)'},
-  {id: 'co2total', content: 'CO2 Emission (total)'},
-  {id: 'sulfurpp', content: 'Sulfur Emissions (per person)'},
-];
+const datasetNames = {
+  temperature: 'Average Temperature',
+  forestpercent: 'Forest Coverage (%)',
+  foresttotal: 'Forest Coverage (total)',
+  co2pp: 'CO2 Emission (per person)',
+  co2total: 'CO2 Emission (total)',
+  sulfurpp: 'Sulfur Emissions (per person)',
+};
 
 export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       region: undefined,
+      hoverRegion: undefined,
       range: ["1970", "2000"],
-      activePrimary: 'forestpercent',
-      dataPrimary: datasets['forestpercent'],
-      activeSecondary: 'foresttotal',
-      dataSecondary: datasets['foresttotal'],
+      activePrimary: 'co2pp',
+      dataPrimary: datasets['co2pp'],
+      activeSecondary: 'co2total',
+      dataSecondary: datasets['co2total'],
     }
   }
 
   onRegionSelect = region => this.setState(state => ({
     ...state,
     region: region,
+  }));
+
+  onRegionHover = region => this.setState(state => ({
+    ...state,
+    hoverRegion: region,
   }));
 
   onRangeSelect = (startDate, endDate) => {
@@ -140,31 +147,32 @@ export default class App extends React.Component {
     return (<>
         <Grid>
           <AuxiliaryPane>
-            <CO2BarChart/>
-            <Auxiliary
-              region={this.state.region}
+            <Doublebar
               range={this.state.range}
+              namePrimary={datasetNames[this.state.activePrimary]}
+              nameSecondary={datasetNames[this.state.activeSecondary]}
               primary={this.state.dataPrimary}
               secondary={this.state.dataSecondary}
-              datasetList={datasetList}
-              activePrimary={this.state.activePrimary}
-              activeSecondary={this.state.activeSecondary}
+              hover={this.onRegionHover}
+              hoverRegion={this.state.hoverRegion}
             />
           </AuxiliaryPane>
           <MapPane>
             <Map
               geography={geography}
               region={this.state.region}
+              hoverRegion={this.state.hoverRegion}
               range={this.state.range}
               active={this.state.activePrimary}
               data={this.state.dataPrimary}
               select={this.onRegionSelect}
+              hover={this.onRegionHover}
             />
             <Floating position={'top'}>
               <Menu
                 key={'primary'}
                 select={this.onPrimarySelect}
-                items={datasetList}
+                datasets={datasetNames}
                 active={this.state.activePrimary}
                 direction={'down'}
               />
@@ -173,7 +181,7 @@ export default class App extends React.Component {
               <Menu
                 key={'secondary'}
                 select={this.onSecondarySelect}
-                items={datasetList}
+                datasets={datasetNames}
                 active={this.state.activeSecondary}
                 direction={'up'}
               />
