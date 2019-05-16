@@ -50,6 +50,8 @@ class Map extends Component {
   color = (data, scale, geography) => {
     if (this.props.data === undefined) {
       return "#ECEFF1";
+    } else if (this.props.hoverRegion === geography.properties.name) {
+      return "#FF5722";
     } else {
       const value = data[geography.properties.name];
       if (value === undefined) {
@@ -135,6 +137,8 @@ class Map extends Component {
                       geography={geography}
                       projection={projection}
                       onClick={this.select}
+                      onMouseEnter={() => this.props.hover(geography.properties.name)}
+                      onMouseLeave={() => this.props.hover(undefined)}
                       style={{
                         default: {
                           fill: this.color(data, scale, geography),

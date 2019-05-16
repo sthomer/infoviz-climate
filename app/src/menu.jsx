@@ -16,18 +16,18 @@ export default class Menu extends React.Component {
     return (
       <Container>
         <DropdownButton
-          title={this.props.items.find(item => item.id === this.props.active).content}
+          title={this.props.datasets[this.props.active]}
           variant={'outline-secondary'}
           drop={this.props.direction}
         >
-          {this.props.items.map(item =>
+          {Object.keys(this.props.datasets).map(item =>
             <Dropdown.Item
-              key={item.id}
-              eventKey={item.id}
+              key={item}
+              eventKey={item}
               onSelect={this.props.select}
-              active={this.props.active === item.id ? 'active' : undefined}
+              active={this.props.active === item ? 'active' : undefined}
             >
-              {item.content}
+              {this.props.datasets[item]}
             </Dropdown.Item>
           )}
         </DropdownButton>
