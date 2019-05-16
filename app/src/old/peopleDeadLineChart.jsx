@@ -5,14 +5,14 @@ import { Title } from './styles';
 import ReactChartkick, { LineChart } from 'react-chartkick'
 import Chart from 'chart.js'
 
-import data from './data/people_affected_extreme_temp.json';
+import data from '../data/people_dead_extreme_temp.json';
 
 
 
 ReactChartkick.addAdapter(Chart)
 
 
-export default class PeopleAffectedLineChart extends React.Component {
+export default class PeopleDeadLineChart extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -20,7 +20,6 @@ export default class PeopleAffectedLineChart extends React.Component {
     }
   }
   render() {
-    
 
     //get the dates from the json file
     // console.log(data)
@@ -39,9 +38,9 @@ export default class PeopleAffectedLineChart extends React.Component {
     return (<>
       <LineChart data={
         [
-          { "name": "Injuries", "data": data[this.props.region] }
+          { "name": "Casualties", "data": data[this.props.region] }
         ]
-      } responsive={true} maintainAspectRatio={false} title={'People affected by extreme temp'} colors={["#663399"]}/>
+      } responsive={true} maintainAspectRatio={false} title={'People who died by extreme temp'} colors={["#1A5E25"]}/>
     </>)
 
 

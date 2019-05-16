@@ -1,4 +1,5 @@
-import React, {Component} from "react";
+import React, {Component} from 'react';
+import styled from 'styled-components';
 import {
   ComposableMap,
   ZoomableGroup,
@@ -8,7 +9,23 @@ import {
 import {Motion, spring} from 'react-motion';
 import * as d3 from 'd3';
 import * as topojson from 'topojson';
+import '../node_modules/react-vis/dist/style.css';
+import {
+  ContinuousColorLegend,
+} from 'react-vis';
+
 import allcountries from './topojson/world-countries-sans-antarctica.json';
+
+const Container = styled.div`
+  position: relative;
+`;
+
+const Legend = styled.div`
+  position: absolute;
+  transform: rotate(-0.25turn);
+  top: 300px;
+  left: -100px;
+`;
 
 const geographyPaths = topojson.feature(
   allcountries, allcountries.objects.countries1).features;
@@ -25,9 +42,6 @@ const center = (coordinates) => {
   return geoCenter;
 };
 
-const mean = ns => ns === undefined ? undefined
-  : ns.reduce((x, y) => Number(x) + Number(y)) / ns.length;
-
 const colors = {
   temperature: ['#00008b', /*'#e5e5f3',*/ '#ffffff', /*'#f7e8e8',*/ '#b22222'],
   forestpercent: ['#ffffff', '#e8f3e8', '#228b22'],
@@ -43,7 +57,7 @@ class Map extends Component {
     this.state = {
       center: [0, 0],
       zoom: 0.8,
-      selected: {},
+      hover: true,
     };
   }
 
@@ -63,12 +77,30 @@ class Map extends Component {
   };
 
   select = (geography, e) => {
-    this.props.select(geography.properties.name);
-    this.setState(state => ({
-      ...state,
-      center: center(geography.geometry.coordinates),
-      zoom: 3,
-    }));
+    if (this.state.hover) {
+      this.setState(state => ({
+        ...state,
+        center: center(geography.geometry.coordinates),
+        zoom: 3,
+        hover: false,
+      }));
+      this.props.select(geography.properties.name);
+    } else if (this.props.region === geography.properties.name) {
+      this.setState(state => ({
+        ...state,
+        hover: true,
+      }));
+      this.props.select('World')
+    } else {
+      this.setState(state => ({
+        ...state,
+        center: center(geography.geometry.coordinates),
+        zoom: 3,
+        hover: false,
+      }));
+      this.props.select(geography.properties.name);
+      this.props.hover(geography.properties.name);
+    }
   };
 
   zoom = (e) => {
@@ -87,7 +119,7 @@ class Map extends Component {
     const range = [
       this.props.data.dates.findIndex(date => Number(date) === this.props.range[0]),
       this.props.data.dates.findIndex(date => Number(date) === this.props.range[1]),
-      ];
+    ];
     range[0] = range[0] >= 0 ? range[0] : 0;
     range[1] = range[1] >= 0 ? range[1] : this.props.data.dates.length;
     // TODO: Set range state of App?
@@ -101,13 +133,25 @@ class Map extends Component {
     const values = Object.values(data).sort((x, y) => x - y);
     const min = Math.min(...values.slice(values.length * 0.05));
     const max = Math.max(...values.slice(0, values.length * 0.95));
+    const mid = (max - min) / 2;
     const scale = d3.scaleSymlog()
-      .domain([min, (max - min) / 2, max])
+      .domain([min, mid, max])
       .range(colors[this.props.active])
       .clamp(true);
 
     return (
-      <div onWheel={this.zoom}>
+      <Container onWheel={this.zoom}>
+        <Legend>
+          <ContinuousColorLegend
+            endColor={colors[this.props.active][2]}
+            endTitle={max.toFixed(2)}
+            midColor={colors[this.props.active][1]}
+            midTitle={mid.toFixed(2)}
+            startColor={colors[this.props.active][0]}
+            startTitle={min.toFixed(2)}
+            width={300}
+          />
+        </Legend>
         <Motion
           defaultStyle={{
             zoom: this.state.zoom,
@@ -137,7 +181,8 @@ class Map extends Component {
                       geography={geography}
                       projection={projection}
                       onClick={this.select}
-                      onMouseEnter={() => this.props.hover(geography.properties.name)}
+                      onMouseEnter={() => this.state.hover &&
+                        this.props.hover(geography.properties.name)}
                       style={{
                         default: {
                           fill: this.color(data, scale, geography),
@@ -166,7 +211,7 @@ class Map extends Component {
             </ComposableMap>
           )}
         </Motion>
-      </div>
+      </Container>
     )
   }
 }

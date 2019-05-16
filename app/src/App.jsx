@@ -1,14 +1,12 @@
 import React from 'react';
 import '@atlaskit/css-reset';
 import styled from 'styled-components';
-import * as d3 from 'd3';
-import Auxiliary from './auxiliary';
-import Timelines from './timelines';
 import Map from './imap';
 import Menu from './menu';
 import Slider from './slider';
 import Timeline from './timeline';
 import Doublebar from './doublebar';
+import Summary from './summary';
 
 import geography from './topojson/world-countries-sans-antarctica.json';
 
@@ -18,13 +16,6 @@ import foresttotal from './data/forest_land_total_area_ha';
 import co2pp from './data/co2_emissions_tonnes_per_person.json';
 import co2total from './data/yearly_co2_emissions_1000_tonnes.json';
 import sulfurpp from './data/sulfur_emissions_per_person_kg';
-
-import ForestPerctLineChart from './forestPerctLineChart.jsx';
-import CO2LineChart from './co2linechart.jsx';
-import PeopleAffectedLineChart from './peopleAffectedLineChart.jsx';
-import PeopleDeadLineChart from './peopleDeadLineChart.jsx';
-
-import CO2BarChart from './co2_world_barChart.jsx'
 
 const Grid = styled.div`
   display: grid;
@@ -147,6 +138,9 @@ export default class App extends React.Component {
     return (<>
         <Grid>
           <AuxiliaryPane>
+            <Summary
+              name={this.state.hoverRegion}
+            />
             <Doublebar
               range={this.state.range}
               namePrimary={datasetNames[this.state.activePrimary]}
@@ -194,7 +188,9 @@ export default class App extends React.Component {
             />
             <Timeline
               primary={this.state.dataPrimary}
+              namePrimary={datasetNames[this.state.activePrimary]}
               secondary={this.state.dataSecondary}
+              nameSecondary={datasetNames[this.state.activeSecondary]}
               region={this.state.hoverRegion}
               range={this.state.range}
             />

@@ -4,6 +4,7 @@ import '../node_modules/react-vis/dist/style.css';
 import {
   FlexibleXYPlot,
   HorizontalRectSeries,
+  XAxis,
 } from 'react-vis';
 
 const Container = styled.div`
@@ -69,9 +70,9 @@ export default class Doublebar extends React.Component {
       this.primary[region] = values.reduce((x, y) => Number(x) + Number(y)) / values.length
     });
 
-    this.primary = Object.entries(this.primary).sort((x, y) => x[1] - y[1])
+    this.primary = Object.entries(this.primary).sort((x, y) => Number(x[1]) - Number(y[1]))
       .map((entry, index) => ({
-        x0: 0, x: entry[1],
+        x0: 0, x: -entry[1],
         y0: index - 1, y: index,
         label: entry[0],
         // color: Number(index !== this.state.index),
@@ -88,7 +89,7 @@ export default class Doublebar extends React.Component {
       .map(entry => {
         const index = this.primary.findIndex(primary => primary.label === entry[0]);
         return {
-          x0: 0, x: -entry[1],
+          x0: 0, x: entry[1],
           y0: index - 1, y: index,
           label: entry[0],
           // color: Number(index !== this.state.index),
@@ -112,21 +113,23 @@ export default class Doublebar extends React.Component {
       <Container>
         <Underlay>
           <Left>
-            <Header>{this.props.nameSecondary}</Header>
-            <FlexibleXYPlot
-              onMouseLeave={() => this.hover(undefined, undefined)}>
+            <Header>{this.props.namePrimary}</Header>
+            <FlexibleXYPlot>
+              {/*onMouseLeave={() => this.hover(undefined, undefined)}>*/}
+              <XAxis/>
               <HorizontalRectSeries
-                data={this.secondary}
+                data={this.primary}
                 onValueMouseOver={data => this.hover(data, data.y)}
               />
             </FlexibleXYPlot>
           </Left>
           <Right>
-            <Header>{this.props.namePrimary}</Header>
-            <FlexibleXYPlot
-              onMouseLeave={() => this.hover(undefined, undefined)}>
+            <Header>{this.props.nameSecondary}</Header>
+            <FlexibleXYPlot>
+              {/*onMouseLeave={() => this.hover(undefined, undefined)}>*/}
+              <XAxis/>
               <HorizontalRectSeries
-                data={this.primary}
+                data={this.secondary}
                 onValueMouseOver={data => this.hover(data, data.y)}
               />
             </FlexibleXYPlot>
