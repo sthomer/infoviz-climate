@@ -106,28 +106,30 @@ export default class Timelines extends React.Component {
 
     // First value axis
     let valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
-    valueAxis.title.text = "primary dataset";
+    valueAxis.title.text = this.props.namePrimary;
 
     // Second value axis
     let valueAxis2 = chart.yAxes.push(new am4charts.ValueAxis());
-    valueAxis2.title.text = "secondary dataset";
+    valueAxis2.title.text = this.props.nameSecondary;
     valueAxis2.renderer.opposite = true;
 
     // First series
-    let series = chart.series.push(new am4charts.ColumnSeries());
+    let series = chart.series.push(new am4charts.LineSeries());
     series.dataFields.valueY = "primaryDatasetValue";
     series.dataFields.categoryX = "date";
-    series.name = "first dataset";
+    // series.name = "first dataset";
     series.tooltipText = "{name}: [bold]{valueY}[/]";
+    series.connect = false;
 
     // Second series
     let series2 = chart.series.push(new am4charts.LineSeries());
     series2.dataFields.valueY = "secondaryDatasetValue";
     series2.dataFields.categoryX = "date";
-    series2.name = "secondary dataset";
+    // series2.name = "secondary dataset";
     series2.tooltipText = "{name}: [bold]{valueY}[/]";
     series2.strokeWidth = 3;
     series2.yAxis = valueAxis2;
+    series2.connect = false;
 
     dateAxis.renderer.labels.template.cursorOverStyle = am4core.MouseCursorStyle.pointer;
 

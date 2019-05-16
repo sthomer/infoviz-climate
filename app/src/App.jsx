@@ -6,6 +6,8 @@ import Auxiliary from './auxiliary';
 import Timelines from './timelines';
 import Map from './imap';
 import Menu from './menu';
+import Slider from './slider';
+import Timeline from './timeline';
 
 import geography from './topojson/world-countries-sans-antarctica.json';
 
@@ -102,72 +104,95 @@ export default class App extends React.Component {
     }));
   };
 
-  onPrimarySelect = data => this.setState(state => ({
-    ...state,
-    activePrimary: data,
-    dataPrimary: datasets[data],
-  }));
+  onPrimarySelect = data => {
+    const min = Math.min(
+      Number(datasets[data].dates[0]),
+      Number(this.state.dataSecondary.dates[0]));
+    const max = Math.max(
+      Number(datasets[data].dates[datasets[data].dates.length - 1]),
+      Number(this.state.dataSecondary.dates[this.state.dataSecondary.dates.length - 1]));
+    this.setState(state => ({
+      ...state,
+      range: [min, max],
+      minMax: {min: min, max: max},
+      activePrimary: data,
+      dataPrimary: datasets[data],
+    }));
+  };
 
-  onSecondarySelect = data => this.setState(state => ({
-    ...state,
-    activeSecondary: data,
-    dataSecondary: datasets[data],
-  }));
+  onSecondarySelect = data => {
+    const min = Math.min(
+      Number(this.state.dataPrimary.dates[0]),
+      Number(datasets[data].dates[0]));
+    const max = Math.max(
+      Number(this.state.dataPrimary.dates[this.state.dataPrimary.dates.length - 1]),
+      Number(datasets[data].dates[datasets[data].dates.length - 1]));
+    this.setState(state => ({
+      ...state,
+      range: [min, max],
+      minMax: {min: min, max: max},
+      activeSecondary: data,
+      dataSecondary: datasets[data],
+    }));
+  };
 
   render() {
     return (<>
-      <Grid>
-        <AuxiliaryPane>
-          <CO2BarChart/>
-          <Auxiliary
-            region={this.state.region}
-            range={this.state.range}
-            primary={this.state.dataPrimary}
-            secondary={this.state.dataSecondary}
-            datasetList={datasetList}
-            activePrimary={this.state.activePrimary}
-            activeSecondary={this.state.activeSecondary}
-          />
-        </AuxiliaryPane>
-        <MapPane>
-          <Map
-            geography={geography}
-            region={this.state.region}
-            range={this.state.range}
-            active={this.state.activePrimary}
-            data={this.state.dataPrimary}
-            select={this.onRegionSelect}
-          />
-          <Floating position={'top'}>
-            <Menu
-              key={'primary'}
-              select={this.onPrimarySelect}
-              items={datasetList}
+        <Grid>
+          <AuxiliaryPane>
+            <CO2BarChart/>
+            <Auxiliary
+              region={this.state.region}
+              range={this.state.range}
+              primary={this.state.dataPrimary}
+              secondary={this.state.dataSecondary}
+              datasetList={datasetList}
+              activePrimary={this.state.activePrimary}
+              activeSecondary={this.state.activeSecondary}
+            />
+          </AuxiliaryPane>
+          <MapPane>
+            <Map
+              geography={geography}
+              region={this.state.region}
+              range={this.state.range}
               active={this.state.activePrimary}
-              direction={'down'}
+              data={this.state.dataPrimary}
+              select={this.onRegionSelect}
             />
-          </Floating>
-          <Floating position={'bottom'}>
-            <Menu
-              key={'secondary'}
-              select={this.onSecondarySelect}
-              items={datasetList}
-              active={this.state.activeSecondary}
-              direction={'up'}
+            <Floating position={'top'}>
+              <Menu
+                key={'primary'}
+                select={this.onPrimarySelect}
+                items={datasetList}
+                active={this.state.activePrimary}
+                direction={'down'}
+              />
+            </Floating>
+            <Floating position={'bottom'}>
+              <Menu
+                key={'secondary'}
+                select={this.onSecondarySelect}
+                items={datasetList}
+                active={this.state.activeSecondary}
+                direction={'up'}
+              />
+            </Floating>
+          </MapPane>
+          <TimelinesPane>
+            <Slider
+              range={this.state.minMax}
+              select={this.onRangeSelect}
             />
-          </Floating>
-        </MapPane>
-        <TimelinesPane>
-          <Timelines
-            primary={this.state.dataPrimary}
-            secondary={this.state.dataSecondary}
-            range={this.state.range}
-            updateDate={this.onRangeSelect}
-            region={this.state.region}
-          />
-        </TimelinesPane>
-      </Grid>
-    </>
-  );
+            <Timeline
+              primary={this.state.dataPrimary}
+              secondary={this.state.dataSecondary}
+              region={this.state.region}
+              range={this.state.range}
+            />
+          </TimelinesPane>
+        </Grid>
+      </>
+    );
   }
-  }
+}

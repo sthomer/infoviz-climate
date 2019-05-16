@@ -1,7 +1,5 @@
 import React from 'react';
-import * as d3 from 'd3';
 import styled from 'styled-components';
-import {Title} from './styles';
 import {Dropdown, DropdownButton} from 'react-bootstrap';
 
 const Container = styled.div`
@@ -9,6 +7,10 @@ const Container = styled.div`
 `;
 
 export default class Menu extends React.Component {
+
+  componentDidMount() {
+    this.props.select(this.props.active)
+  }
 
   render() {
     return (
