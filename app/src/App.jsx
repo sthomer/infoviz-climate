@@ -195,7 +195,7 @@ export default class App extends React.Component {
             <Timeline
               primary={this.state.dataPrimary}
               secondary={this.state.dataSecondary}
-              region={this.state.region}
+              region={this.state.hoverRegion}
               range={this.state.range}
             />
           </TimelinesPane>

@@ -31,6 +31,10 @@ const Right = styled.div`
   top: 0px;
 `;
 
+const Center = styled.div`
+  text-align: center;
+`;
+
 export default class Timeline extends React.Component {
 
   load = props => {
@@ -54,10 +58,14 @@ export default class Timeline extends React.Component {
       secondaryRange[0] = secondaryRange[0] >= 0 ? secondaryRange[0] : 0;
       secondaryRange[1] = secondaryRange[1] >= 0 ? secondaryRange[1] : this.props.secondary.dates.length;
 
-      this.primary = props.primary[props.region].slice(primaryRange[0], primaryRange[1])
-        .map((value, index) => ({x: props.primary.dates[index], y: Number(value)}));
-      this.secondary = props.secondary[props.region].slice(secondaryRange[0], secondaryRange[1])
-        .map((value, index) => ({x: props.secondary.dates[index], y: Number(value)}));
+      const primaryRegion = props.primary[props.region];
+      this.primary = primaryRegion === undefined ? undefined :
+        primaryRegion.slice(primaryRange[0], primaryRange[1])
+          .map((value, index) => ({x: props.primary.dates[index], y: Number(value)}));
+      const secondaryRegion = props.secondary[props.region];
+      this.secondary = secondaryRegion === undefined ? undefined :
+        secondaryRegion.slice(secondaryRange[0], secondaryRange[1])
+          .map((value, index) => ({x: props.secondary.dates[index], y: Number(value)}));
 
     }
   };
@@ -65,23 +73,27 @@ export default class Timeline extends React.Component {
   render() {
     this.load(this.props);
     return (
-      <Container>
-        <Left>
-          <FlexibleXYPlot key={'left'} margin={{left: 80, right: 80}} xDomain={this.props.range}>
-            <HorizontalGridLines/>
-            <XAxis tickFormat={year => year}/>
-            <YAxis/>
-            <LineSeries data={this.primary}/>
-          </FlexibleXYPlot>
-        </Left>
-        <Right>
-          <FlexibleXYPlot key={'right'} margin={{left: 80, right: 80}} xDomain={this.props.range}>
-            <XAxis tickFormat={year => year}/>
-            <YAxis orientation={'right'}/>
-            <LineSeries data={this.secondary}/>
-          </FlexibleXYPlot>
-        </Right>
-      </Container>
+      this.primary === undefined || this.secondary === undefined
+        ? <Center>Data unavailable for this country</Center> :
+        <Container>
+          <Left>
+            <FlexibleXYPlot key={'left'} margin={{left: 80, right: 80}}
+                            xDomain={this.props.range}>
+              <HorizontalGridLines/>
+              <XAxis tickFormat={year => year}/>
+              <YAxis/>
+              <LineSeries data={this.primary}/>
+            </FlexibleXYPlot>
+          </Left>
+          <Right>
+            <FlexibleXYPlot key={'right'} margin={{left: 80, right: 80}}
+                            xDomain={this.props.range}>
+              <XAxis tickFormat={year => year}/>
+              <YAxis orientation={'right'}/>
+              <LineSeries data={this.secondary}/>
+            </FlexibleXYPlot>
+          </Right>
+        </Container>
     )
   }
 }

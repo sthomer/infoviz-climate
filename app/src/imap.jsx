@@ -85,8 +85,8 @@ class Map extends Component {
       this.props.geography, this.props.geography.objects.countries1).features;
 
     const range = [
-      this.props.data.dates.indexOf(this.props.range[0]),
-      this.props.data.dates.indexOf(this.props.range[1])
+      this.props.data.dates.findIndex(date => Number(date) === this.props.range[0]),
+      this.props.data.dates.findIndex(date => Number(date) === this.props.range[1]),
       ];
     range[0] = range[0] >= 0 ? range[0] : 0;
     range[1] = range[1] >= 0 ? range[1] : this.props.data.dates.length;
@@ -138,7 +138,6 @@ class Map extends Component {
                       projection={projection}
                       onClick={this.select}
                       onMouseEnter={() => this.props.hover(geography.properties.name)}
-                      onMouseLeave={() => this.props.hover(undefined)}
                       style={{
                         default: {
                           fill: this.color(data, scale, geography),

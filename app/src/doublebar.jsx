@@ -50,8 +50,8 @@ export default class Doublebar extends React.Component {
 
   load = props => {
     const primaryRange = [
-      this.props.primary.dates.indexOf(this.props.range[0]),
-      this.props.primary.dates.indexOf(this.props.range[1]),
+      this.props.primary.dates.findIndex(date => Number(date) === this.props.range[0]),
+      this.props.primary.dates.findIndex(date => Number(date) === this.props.range[1]),
     ];
     primaryRange[0] = primaryRange[0] >= 0 ? primaryRange[0] : 0;
     primaryRange[1] = primaryRange[1] >= 0 ? primaryRange[1] : this.props.primary.dates.length;
@@ -113,7 +113,8 @@ export default class Doublebar extends React.Component {
         <Underlay>
           <Left>
             <Header>{this.props.nameSecondary}</Header>
-            <FlexibleXYPlot onMouseLeave={() => this.hover(undefined, undefined)}>
+            <FlexibleXYPlot
+              onMouseLeave={() => this.hover(undefined, undefined)}>
               <HorizontalRectSeries
                 data={this.secondary}
                 onValueMouseOver={data => this.hover(data, data.y)}
@@ -122,7 +123,8 @@ export default class Doublebar extends React.Component {
           </Left>
           <Right>
             <Header>{this.props.namePrimary}</Header>
-            <FlexibleXYPlot onMouseLeave={() => this.hover(undefined, undefined)}>
+            <FlexibleXYPlot
+              onMouseLeave={() => this.hover(undefined, undefined)}>
               <HorizontalRectSeries
                 data={this.primary}
                 onValueMouseOver={data => this.hover(data, data.y)}

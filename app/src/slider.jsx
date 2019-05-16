@@ -24,6 +24,8 @@ export default class Slider extends React.Component {
             maxValue={this.props.range.max}
             value={this.state.range === undefined ? this.props.range : this.state.range}
             onChange={range => {
+              range.min = Math.max(range.min, this.props.range.min);
+              range.max = Math.min(range.max, this.props.range.max);
               this.props.select(range.min, range.max);
               this.setState({range});
             }}
