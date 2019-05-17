@@ -8,14 +8,16 @@ import Timeline from './timeline';
 import Doublebar from './doublebar';
 import Summary from './summary';
 
-import geography from './topojson/world-countries-sans-antarctica.json';
+import geography from './topojson/world-countries-sans-antarctica';
 
-import temperature from './data/GlobalTempByCountryFrom1800-mean.json';
-import forestpercent from './data/forest_coverage_percent.json';
+import temperature from './data/GlobalTempByCountryFrom1800-mean';
+import forestpercent from './data/forest_coverage_percent';
 import foresttotal from './data/forest_land_total_area_ha';
-import co2pp from './data/co2_emissions_tonnes_per_person.json';
-import co2total from './data/yearly_co2_emissions_1000_tonnes.json';
+import co2pp from './data/co2_emissions_tonnes_per_person';
+import co2total from './data/yearly_co2_emissions_1000_tonnes';
 import sulfurpp from './data/sulfur_emissions_per_person_kg';
+// import affectedtemp from './data/people_affected_extreme_temp';
+// import deadtemp from './data/people_affected_extreme_temp';
 
 const Grid = styled.div`
   display: grid;
@@ -60,6 +62,8 @@ const datasets = {
   co2pp: co2pp,
   co2total: co2total,
   sulfurpp: sulfurpp,
+  // affectedtemp: affectedtemp,
+  // deadtemp: deadtemp,
 };
 
 const datasetNames = {
@@ -69,6 +73,8 @@ const datasetNames = {
   co2pp: 'CO2 Emission (per person)',
   co2total: 'CO2 Emission (total)',
   sulfurpp: 'Sulfur Emissions (per person)',
+  // affectedtemp: 'People Affected by Extreme Temp',
+  // deadtemp: 'People Killed by Extreme Temp',
 };
 
 export default class App extends React.Component {

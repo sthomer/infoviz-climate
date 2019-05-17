@@ -49,6 +49,8 @@ const colors = {
   co2pp: ['#ffffff', '#f7e8e8', '#b22222'],
   co2total: ['#ffffff', '#f7e8e8', '#b22222'],
   sulfurpp: ['#ffffff', '#ffffe5', '#ffff00'],
+  // affectedtemp: ['white', 'lightgrey', 'darkgrey'],
+  // deadtemp: ['white', 'lightgrey', 'darkgrey'],
 };
 
 class Map extends Component {
