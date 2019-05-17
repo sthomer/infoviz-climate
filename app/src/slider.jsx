@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import InputRange from 'react-input-range';
-import 'react-input-range/lib/css/index.css';
+import './slider.css';
 
 const Container = styled.div`
   padding: 10px;

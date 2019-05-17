@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import styled from 'styled-components';
 import {Button} from 'react-bootstrap';
+import {colors} from './colors';
 import {
   ComposableMap,
   ZoomableGroup,
@@ -51,7 +52,7 @@ const center = (coordinates) => {
   return geoCenter;
 };
 
-const colors = {
+const colorScale = {
   temperature: ['#00008b', /*'#e5e5f3',*/ '#ffffff', /*'#f7e8e8',*/ '#b22222'],
   forestpercent: ['#ffffff', '#e8f3e8', '#228b22'],
   foresttotal: ['#ffffff', '#e8f3e8', '#228b22'],
@@ -68,11 +69,7 @@ class Map extends Component {
     this.state = {
       center: [0, 0],
       zoom: 0.8,
-      hover: true,
     };
-
-    this.geographyPaths = topojson.feature(
-      this.props.geography, this.props.geography.objects.countries1).features;
 
     this.centers = {};
     geographyPaths.map(geography =>
@@ -84,7 +81,7 @@ class Map extends Component {
       return "#ECEFF1";
     } else if (this.props.hoverRegion === geography.properties.name
       || this.props.region === geography.properties.name) {
-      return "#FF5722";
+      return colors.tertiary;
     } else {
       const value = this.props.avg[geography.properties.name];
       if (value === undefined) {
@@ -96,26 +93,16 @@ class Map extends Component {
   };
 
   select = (geography, e) => {
-    if (this.state.hover) {
+    if (this.props.region === geography.properties.name) {
       this.setState(state => ({
         ...state,
-        center: this.centers[geography.properties.name],
-        zoom: 2,
-        hover: false,
       }));
-      this.props.select(geography.properties.name);
-    } else if (this.props.region === geography.properties.name) {
-      this.setState(state => ({
-        ...state,
-        hover: true,
-      }));
-      this.props.select('World')
+      this.props.select('Global');
     } else {
       this.setState(state => ({
         ...state,
         center: this.centers[geography.properties.name],
         zoom: 2,
-        hover: false,
       }));
       this.props.select(geography.properties.name);
       this.props.hover(geography.properties.name);
@@ -148,21 +135,25 @@ class Map extends Component {
     const mid = (max - min) / 2;
     const scale = d3.scaleSymlog()
       .domain([min, mid, max])
-      .range(colors[this.props.active])
+      .range(colorScale[this.props.active])
       .clamp(true);
 
     return (
       <Container onWheel={this.zoom}>
         <ZoomOut>
-          <Button variant={'light'} onClick={this.zoomOut}>{'\u2014'}</Button>
+          <Button
+            variant={'light'}
+            onClick={this.zoomOut}
+            style={{fontSize: 20}}
+          >{'🌐'}</Button>
         </ZoomOut>
         <Legend>
           <ContinuousColorLegend
-            endColor={colors[this.props.active][2]}
+            endColor={colorScale[this.props.active][2]}
             endTitle={max.toFixed(2)}
-            midColor={colors[this.props.active][1]}
+            midColor={colorScale[this.props.active][1]}
             midTitle={mid.toFixed(2)}
-            startColor={colors[this.props.active][0]}
+            startColor={colorScale[this.props.active][0]}
             startTitle={min.toFixed(2)}
             width={300}
           />
@@ -187,7 +178,7 @@ class Map extends Component {
               <ZoomableGroup center={this.state.center} zoom={this.state.zoom}
                              style={{width: "100%", height: "100%"}}>
                 <Geographies
-                  geography={this.geographyPaths}
+                  geography={geographyPaths}
                   disableOptimization={true}
                 >
                   {(geographies, projection) => geographies.map((geography, i) => (
@@ -196,7 +187,8 @@ class Map extends Component {
                       geography={geography}
                       projection={projection}
                       onClick={this.select}
-                      onMouseEnter={() => this.state.hover &&
+                      onMouseEnter={() =>
+                        // this.state.hover &&
                         this.props.hover(geography.properties.name)}
                       style={{
                         default: {

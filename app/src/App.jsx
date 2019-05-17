@@ -8,7 +8,6 @@ import Timeline from './timeline';
 import Doublebar from './doublebar';
 import Summary from './summary';
 
-import geography from './topojson/world-countries-sans-antarctica';
 
 import temperature from './data/GlobalTempByCountryFrom1850-mean';
 import forestpercent from './data/forest_coverage_percent';
@@ -129,8 +128,8 @@ export default class App extends React.Component {
     }
 
     const secondaryRange = [
-      this.state.dataSecondary.dates.indexOf(this.state.range[0]),
-      this.state.dataSecondary.dates.indexOf(this.state.range[1]),
+      this.state.dataSecondary.dates.findIndex(date => Number(date) === this.state.range[0]),
+      this.state.dataSecondary.dates.findIndex(date => Number(date) === this.state.range[1]),
     ];
     secondaryRange[0] = secondaryRange[0] >= 0 ? secondaryRange[0] : 0;
     secondaryRange[1] = secondaryRange[1] >= 0 ? secondaryRange[1] : this.state.dataSecondary.dates.length;
@@ -200,10 +199,10 @@ export default class App extends React.Component {
         <Grid>
           <AuxiliaryPane>
             <Summary
-              name={this.state.hoverRegion}
+              selected={this.state.region}
+              hover={this.state.hoverRegion}
             />
             <Doublebar
-              // range={this.state.range}
               namePrimary={datasetNames[this.state.activePrimary]}
               rangePrimary={this.state.rangePrimary}
               avgPrimary={this.state.avgPrimary}
@@ -217,12 +216,9 @@ export default class App extends React.Component {
           </AuxiliaryPane>
           <MapPane>
             <Map
-              geography={geography}
               region={this.state.region}
               hoverRegion={this.state.hoverRegion}
-              // range={this.state.range}
               active={this.state.activePrimary}
-              // data={this.state.dataPrimary}
               avg={this.state.avgPrimary}
               select={this.onRegionSelect}
               hover={this.onRegionHover}
@@ -254,9 +250,11 @@ export default class App extends React.Component {
             <Timeline
               primary={this.state.dataPrimary}
               namePrimary={datasetNames[this.state.activePrimary]}
+              rangePrimary={this.state.rangePrimary}
               secondary={this.state.dataSecondary}
               nameSecondary={datasetNames[this.state.activeSecondary]}
-              region={this.state.hoverRegion}
+              rangeSecondary={this.state.rangeSecondary}
+              region={this.state.region === 'Global' ? this.state.hoverRegion : this.state.region}
               range={this.state.range}
             />
           </TimelinesPane>
