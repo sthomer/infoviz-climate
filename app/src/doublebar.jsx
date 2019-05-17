@@ -76,7 +76,7 @@ export default class Doublebar extends React.Component {
         y0: index - 1, y: index,
         label: entry[0],
         // color: Number(index !== this.state.index),
-        color: Number(entry[0] !== this.props.hoverRegion),
+        color: Number(entry[0] !== this.props.hoverRegion && entry[0] !== this.props.region),
       }));
 
     this.secondary = {};
@@ -93,13 +93,13 @@ export default class Doublebar extends React.Component {
           y0: index - 1, y: index,
           label: entry[0],
           // color: Number(index !== this.state.index),
-          color: Number(entry[0] !== this.props.hoverRegion),
+          color: Number(entry[0] !== this.props.hoverRegion && entry[0] !== this.props.region),
         }
       });
   };
 
   hover = (data, index) => {
-    this.props.hover(data === undefined ? undefined : data.label);
+    this.props.hover(data.label);
     this.setState(state => ({
       ...state,
       value: data,
@@ -115,22 +115,18 @@ export default class Doublebar extends React.Component {
           <Left>
             <Header>{this.props.namePrimary}</Header>
             <FlexibleXYPlot>
-              {/*onMouseLeave={() => this.hover(undefined, undefined)}>*/}
-              <XAxis/>
               <HorizontalRectSeries
                 data={this.primary}
-                onValueMouseOver={data => this.hover(data, data.y)}
+                onNearestXY={data => this.hover(data, data.y)}
               />
             </FlexibleXYPlot>
           </Left>
           <Right>
             <Header>{this.props.nameSecondary}</Header>
             <FlexibleXYPlot>
-              {/*onMouseLeave={() => this.hover(undefined, undefined)}>*/}
-              <XAxis/>
               <HorizontalRectSeries
                 data={this.secondary}
-                onValueMouseOver={data => this.hover(data, data.y)}
+                onNearestXY={data => this.hover(data, data.y)}
               />
             </FlexibleXYPlot>
           </Right>

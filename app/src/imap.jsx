@@ -1,10 +1,13 @@
 import React, {Component} from 'react';
 import styled from 'styled-components';
+import {Button} from 'react-bootstrap';
 import {
   ComposableMap,
   ZoomableGroup,
   Geographies,
   Geography,
+  Markers,
+  Marker,
 } from "react-simple-maps";
 import {Motion, spring} from 'react-motion';
 import * as d3 from 'd3';
@@ -18,6 +21,12 @@ import allcountries from './topojson/world-countries-sans-antarctica.json';
 
 const Container = styled.div`
   position: relative;
+`;
+
+const ZoomOut = styled.div`
+  position: absolute;
+  top: 8px;
+  left: 8px;
 `;
 
 const Legend = styled.div`
@@ -38,7 +47,7 @@ const center = (coordinates) => {
   const max0 = central.map(x => x[0]).reduce((x, y) => Math.max(x, y));
   const min1 = central.map(x => x[1]).reduce((x, y) => Math.min(x, y));
   const max1 = central.map(x => x[1]).reduce((x, y) => Math.max(x, y));
-  const geoCenter = [(max0 - min0) / 2 + min0, (max1 - min1) / 2 + min1];
+  const geoCenter = [(max0 - min0) / 2 + min0, (max1 - min1) / 2 + min1 - 10];
   return geoCenter;
 };
 
@@ -61,12 +70,20 @@ class Map extends Component {
       zoom: 0.8,
       hover: true,
     };
+
+    this.geographyPaths = topojson.feature(
+      this.props.geography, this.props.geography.objects.countries1).features;
+
+    this.centers = {};
+    geographyPaths.map(geography =>
+      this.centers[geography.properties.name] = center(geography.geometry.coordinates));
   }
 
   color = (data, scale, geography) => {
     if (this.props.data === undefined) {
       return "#ECEFF1";
-    } else if (this.props.hoverRegion === geography.properties.name) {
+    } else if (this.props.hoverRegion === geography.properties.name
+      || this.props.region === geography.properties.name) {
       return "#FF5722";
     } else {
       const value = data[geography.properties.name];
@@ -82,8 +99,8 @@ class Map extends Component {
     if (this.state.hover) {
       this.setState(state => ({
         ...state,
-        center: center(geography.geometry.coordinates),
-        zoom: 3,
+        center: this.centers[geography.properties.name],
+        zoom: 2,
         hover: false,
       }));
       this.props.select(geography.properties.name);
@@ -96,8 +113,8 @@ class Map extends Component {
     } else {
       this.setState(state => ({
         ...state,
-        center: center(geography.geometry.coordinates),
-        zoom: 3,
+        center: this.centers[geography.properties.name],
+        zoom: 2,
         hover: false,
       }));
       this.props.select(geography.properties.name);
@@ -105,7 +122,7 @@ class Map extends Component {
     }
   };
 
-  zoom = (e) => {
+  zoom = e => {
     // clientX, clientY have pointer coordinates of client
     const deltaY = e.deltaY;
     this.setState(state => ({
@@ -114,10 +131,17 @@ class Map extends Component {
     }));
   };
 
-  render() {
-    const geographyPaths = topojson.feature(
-      this.props.geography, this.props.geography.objects.countries1).features;
+  zoomOut = () => {
+    this.setState(state => ({
+      center: [0, 0],
+      zoom: 0.8,
+      hover: true,
+    }));
+    this.props.select('Global');
+    this.props.hover('Global');
+  };
 
+  render() {
     const range = [
       this.props.data.dates.findIndex(date => Number(date) === this.props.range[0]),
       this.props.data.dates.findIndex(date => Number(date) === this.props.range[1]),
@@ -143,6 +167,9 @@ class Map extends Component {
 
     return (
       <Container onWheel={this.zoom}>
+        <ZoomOut>
+          <Button variant={'light'} onClick={this.zoomOut}>{'\u2014'}</Button>
+        </ZoomOut>
         <Legend>
           <ContinuousColorLegend
             endColor={colors[this.props.active][2]}
@@ -174,7 +201,7 @@ class Map extends Component {
               <ZoomableGroup center={this.state.center} zoom={this.state.zoom}
                              style={{width: "100%", height: "100%"}}>
                 <Geographies
-                  geography={geographyPaths}
+                  geography={this.geographyPaths}
                   disableOptimization={true}
                 >
                   {(geographies, projection) => geographies.map((geography, i) => (
@@ -209,6 +236,23 @@ class Map extends Component {
                     />
                   ))}
                 </Geographies>
+                {/*<Markers>*/}
+                {/*  {this.geographyPaths.map(geography =>*/}
+                {/*    <Marker*/}
+                {/*      key={geography.properties.name}*/}
+                {/*      marker={{coordinates: this.centers[geography.properties.name]}}*/}
+                {/*    >*/}
+                {/*      <text*/}
+                {/*        style={{*/}
+                {/*          opacity: this.props.region === geography.properties.region ? 1 : 0,*/}
+                {/*          pointerEvents: 'none',*/}
+                {/*        }}*/}
+                {/*      >*/}
+                {/*        {geography.properties.name}*/}
+                {/*      </text>*/}
+                {/*    </Marker>*/}
+                {/*  )}*/}
+                {/*</Markers>*/}
               </ZoomableGroup>
             </ComposableMap>
           )}

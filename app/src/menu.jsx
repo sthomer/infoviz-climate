@@ -17,7 +17,7 @@ export default class Menu extends React.Component {
       <Container>
         <DropdownButton
           title={this.props.datasets[this.props.active]}
-          variant={'outline-secondary'}
+          variant={'light'}
           drop={this.props.direction}
         >
           {Object.keys(this.props.datasets).map(item =>

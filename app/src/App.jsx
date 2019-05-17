@@ -81,8 +81,8 @@ export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      region: undefined,
-      hoverRegion: undefined,
+      region: 'Global',
+      hoverRegion: 'Global',
       range: ["1970", "2000"],
       activePrimary: 'co2pp',
       dataPrimary: datasets['co2pp'],
@@ -155,6 +155,7 @@ export default class App extends React.Component {
               secondary={this.state.dataSecondary}
               hover={this.onRegionHover}
               hoverRegion={this.state.hoverRegion}
+              region={this.state.region}
             />
           </AuxiliaryPane>
           <MapPane>
