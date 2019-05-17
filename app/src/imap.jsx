@@ -33,7 +33,7 @@ const Legend = styled.div`
   position: absolute;
   transform: rotate(-0.25turn);
   top: 300px;
-  left: -100px;
+  left: -125px;
 `;
 
 const geographyPaths = topojson.feature(
@@ -79,14 +79,14 @@ class Map extends Component {
       this.centers[geography.properties.name] = center(geography.geometry.coordinates));
   }
 
-  color = (data, scale, geography) => {
-    if (this.props.data === undefined) {
+  color = (scale, geography) => {
+    if (this.props.avg === undefined) {
       return "#ECEFF1";
     } else if (this.props.hoverRegion === geography.properties.name
       || this.props.region === geography.properties.name) {
       return "#FF5722";
     } else {
-      const value = data[geography.properties.name];
+      const value = this.props.avg[geography.properties.name];
       if (value === undefined) {
         return "#ECEFF1";
       } else {
@@ -142,21 +142,7 @@ class Map extends Component {
   };
 
   render() {
-    const range = [
-      this.props.data.dates.findIndex(date => Number(date) === this.props.range[0]),
-      this.props.data.dates.findIndex(date => Number(date) === this.props.range[1]),
-    ];
-    range[0] = range[0] >= 0 ? range[0] : 0;
-    range[1] = range[1] >= 0 ? range[1] : this.props.data.dates.length;
-    // TODO: Set range state of App?
-
-    const data = {};
-    Object.keys(this.props.data).slice(1).map(region => {
-      const values = this.props.data[region].slice(range[0], range[1]);
-      data[region] = values.reduce((x, y) => Number(x) + Number(y)) / values.length
-    });
-
-    const values = Object.values(data).sort((x, y) => x - y);
+    const values = Object.values(this.props.avg).sort((x, y) => x - y);
     const min = Math.min(...values.slice(values.length * 0.05));
     const max = Math.max(...values.slice(0, values.length * 0.95));
     const mid = (max - min) / 2;
@@ -214,13 +200,13 @@ class Map extends Component {
                         this.props.hover(geography.properties.name)}
                       style={{
                         default: {
-                          fill: this.color(data, scale, geography),
+                          fill: this.color(scale, geography),
                           stroke: "#607D8B",
                           strokeWidth: 0.75,
                           outline: "none",
                         },
                         hover: {
-                          fill: this.color(data, scale, geography),
+                          fill: this.color(scale, geography),
                           stroke: "#607D8B",
                           strokeWidth: 0.75,
                           outline: "none",

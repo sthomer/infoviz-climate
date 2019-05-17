@@ -12,6 +12,7 @@ import {
 
 const Title = styled.h1`
   text-align: center;
+  whitespace: nowrap;
 `;
 
 export default class Summary extends React.Component {

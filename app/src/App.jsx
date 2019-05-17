@@ -10,11 +10,11 @@ import Summary from './summary';
 
 import geography from './topojson/world-countries-sans-antarctica';
 
-import temperature from './data/GlobalTempByCountryFrom1800-mean';
+import temperature from './data/GlobalTempByCountryFrom1850-mean';
 import forestpercent from './data/forest_coverage_percent';
 import foresttotal from './data/forest_land_total_area_ha';
-import co2pp from './data/co2_emissions_tonnes_per_person';
-import co2total from './data/yearly_co2_emissions_1000_tonnes';
+import co2pp from './data/co2_emissions_tonnes_per_personFrom1850';
+import co2total from './data/yearly_co2_emissions_1000_tonnesFrom1850';
 import sulfurpp from './data/sulfur_emissions_per_person_kg';
 // import affectedtemp from './data/people_affected_extreme_temp';
 // import deadtemp from './data/people_affected_extreme_temp';
@@ -77,6 +77,16 @@ const datasetNames = {
   // deadtemp: 'People Killed by Extreme Temp',
 };
 
+const avgOverRange = (data, min, max) => {
+  const avg = {};
+  Object.keys(data).slice(1).map(region => {
+    const values = data[region].slice(min, max);
+    avg[region] = values.reduce((x, y) => Number(x) + Number(y)) / values.length;
+  });
+  return avg;
+};
+
+
 export default class App extends React.Component {
   constructor(props) {
     super(props);
@@ -86,8 +96,12 @@ export default class App extends React.Component {
       range: ["1970", "2000"],
       activePrimary: 'co2pp',
       dataPrimary: datasets['co2pp'],
+      rangePrimary: [0, datasets['co2pp'].length],
+      avgPrimary: avgOverRange(datasets['co2pp'], 0, datasets['co2pp'].length),
       activeSecondary: 'co2total',
       dataSecondary: datasets['co2total'],
+      rangeSecondary: [0, datasets['co2total'].length],
+      avgSecondary: avgOverRange(datasets['co2total'], 0, datasets['co2total'].length),
     }
   }
 
@@ -101,10 +115,49 @@ export default class App extends React.Component {
     hoverRegion: region,
   }));
 
+
   onRangeSelect = (startDate, endDate) => {
+    const primaryRange = [
+      this.state.dataPrimary.dates.findIndex(date => Number(date) === this.state.range[0]),
+      this.state.dataPrimary.dates.findIndex(date => Number(date) === this.state.range[1]),
+    ];
+    primaryRange[0] = primaryRange[0] >= 0 ? primaryRange[0] : 0;
+    primaryRange[1] = primaryRange[1] >= 0 ? primaryRange[1] : this.state.primary.dates.length;
+    if (primaryRange[0] === primaryRange[1]) {
+      primaryRange[0] = 0;
+      primaryRange[1] = this.state.dataPrimary.dates.length;
+    }
+
+    const secondaryRange = [
+      this.state.dataSecondary.dates.indexOf(this.state.range[0]),
+      this.state.dataSecondary.dates.indexOf(this.state.range[1]),
+    ];
+    secondaryRange[0] = secondaryRange[0] >= 0 ? secondaryRange[0] : 0;
+    secondaryRange[1] = secondaryRange[1] >= 0 ? secondaryRange[1] : this.state.dataSecondary.dates.length;
+    if (secondaryRange[0] === secondaryRange[1]) {
+      secondaryRange[0] = 0;
+      secondaryRange[1] = this.state.dataSecondary.dates.length;
+    }
+
+    const avgPrimary = {};
+    Object.keys(this.state.dataPrimary).slice(1).map(region => {
+      const values = this.state.dataPrimary[region].slice(primaryRange[0], primaryRange[1]);
+      avgPrimary[region] = values.reduce((x, y) => Number(x) + Number(y)) / values.length;
+    });
+
+    const avgSecondary = {};
+    Object.keys(this.state.dataSecondary).slice(1).map(region => {
+      const values = this.state.dataSecondary[region].slice(secondaryRange[0], secondaryRange[1]);
+      avgSecondary[region] = values.reduce((x, y) => Number(x) + Number(y)) / values.length;
+    });
+
     this.setState(state => ({
       ...state,
       range: [startDate, endDate],
+      rangePrimary: primaryRange,
+      rangeSecondary: secondaryRange,
+      avgPrimary: avgPrimary,
+      avgSecondary: avgSecondary,
     }));
   };
 
@@ -121,6 +174,7 @@ export default class App extends React.Component {
       minMax: {min: min, max: max},
       activePrimary: data,
       dataPrimary: datasets[data],
+      avgPrimary: avgOverRange(datasets[data]),
     }));
   };
 
@@ -137,6 +191,7 @@ export default class App extends React.Component {
       minMax: {min: min, max: max},
       activeSecondary: data,
       dataSecondary: datasets[data],
+      avgSecondary: avgOverRange(datasets[data]),
     }));
   };
 
@@ -148,11 +203,13 @@ export default class App extends React.Component {
               name={this.state.hoverRegion}
             />
             <Doublebar
-              range={this.state.range}
+              // range={this.state.range}
               namePrimary={datasetNames[this.state.activePrimary]}
+              rangePrimary={this.state.rangePrimary}
+              avgPrimary={this.state.avgPrimary}
               nameSecondary={datasetNames[this.state.activeSecondary]}
-              primary={this.state.dataPrimary}
-              secondary={this.state.dataSecondary}
+              rangeSecondary={this.state.rangeSecondary}
+              avgSecondary={this.state.avgSecondary}
               hover={this.onRegionHover}
               hoverRegion={this.state.hoverRegion}
               region={this.state.region}
@@ -163,9 +220,10 @@ export default class App extends React.Component {
               geography={geography}
               region={this.state.region}
               hoverRegion={this.state.hoverRegion}
-              range={this.state.range}
+              // range={this.state.range}
               active={this.state.activePrimary}
-              data={this.state.dataPrimary}
+              // data={this.state.dataPrimary}
+              avg={this.state.avgPrimary}
               select={this.onRegionSelect}
               hover={this.onRegionHover}
             />

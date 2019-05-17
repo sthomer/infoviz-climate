@@ -9,6 +9,7 @@ import {
   LineSeries,
   Borders,
 } from 'react-vis';
+import {colors} from './colors';
 
 const Container = styled.div`
   width: 100%;
@@ -90,7 +91,10 @@ export default class Timeline extends React.Component {
               <HorizontalGridLines/>
               <XAxis tickFormat={year => year}/>
               <YAxis title={this.props.namePrimary}/>
-              <LineSeries data={this.primary}/>
+              <LineSeries
+                data={this.primary}
+                stroke={colors.primary}
+              />
             </FlexibleXYPlot>
           </Left>
           <Right>
@@ -98,7 +102,10 @@ export default class Timeline extends React.Component {
                             xDomain={this.props.range}>
               <XAxis tickFormat={year => year}/>
               <YAxis orientation={'right'} title={this.props.nameSecondary}/>
-              <LineSeries data={this.secondary}/>
+              <LineSeries
+                data={this.secondary}
+                stroke={colors.secondary}
+              />
             </FlexibleXYPlot>
           </Right>
         </Container>

@@ -9,12 +9,21 @@ const Container = styled.div`
 `;
 
 export default class Slider extends React.Component {
-  state = {
-    range: this.props.range,
+  constructor(props) {
+    super(props);
+    this.state = {
+      range: this.props.range,
+    };
+  }
+
+  change = range => {
+    range.min = Math.max(range.min, this.props.range.min);
+    range.max = Math.min(range.max, this.props.range.max);
+    this.props.select(range.min, range.max);
+    this.setState({range});
   };
 
   render() {
-
     return (
       <Container>
         {this.props.range === undefined ? undefined :
@@ -23,12 +32,7 @@ export default class Slider extends React.Component {
             minValue={this.props.range.min}
             maxValue={this.props.range.max}
             value={this.state.range === undefined ? this.props.range : this.state.range}
-            onChange={range => {
-              range.min = Math.max(range.min, this.props.range.min);
-              range.max = Math.min(range.max, this.props.range.max);
-              this.props.select(range.min, range.max);
-              this.setState({range});
-            }}
+            onChange={this.change}
             // onChangeComplete={range => this.props.select(range.min, range.max)}
           />
         }
