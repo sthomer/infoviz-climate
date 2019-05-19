@@ -92,19 +92,19 @@ export default class Timeline extends React.Component {
               <LineSeries
                 data={this.secondary}
                 stroke={colors.secondary}
-                onNearestX={(value, { index }) =>
-                  this.setState({
-                    crosshairValues: [
-                      { x: this.primary[index].x == undefined ? '-' : this.primary[index].x, y: this.primary[index].y == undefined ? '-' : this.primary[index].y },
-                      { x: this.primary[index].x == undefined ? '-' : this.primary[index].x, y: this.secondary[index].y == undefined ? '-' : this.secondary[index].y }
-                    ]
-                  }
-                  )}
+                // onNearestX={(value, { index }) =>
+                //   this.setState({
+                //     crosshairValues: [
+                //       { x: this.primary[index].x == undefined ? '-' : this.primary[index].x, y: this.primary[index].y == undefined ? '-' : this.primary[index].y },
+                //       { x: this.primary[index].x == undefined ? '-' : this.primary[index].x, y: this.secondary[index].y == undefined ? '-' : this.secondary[index].y }
+                //     ]
+                //   }
+                //   )}
               />
-              <Crosshair values={this.state.crosshairValues}
+              {/* <Crosshair values={this.state.crosshairValues}
                 titleFormat={(d) => ({ title: 'Year', value: d[0].x })}
                 itemsFormat={(d) => [{ title: this.props.namePrimary, value: d[0].y }, { title: this.props.nameSecondary, value: d[1].y }]}
-              />
+              /> */}
             </FlexibleXYPlot>
 
           </Right>
