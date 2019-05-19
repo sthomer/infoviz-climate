@@ -58,20 +58,18 @@ export default class Doublebar extends React.Component {
         x0: 0, x: -entry[1],
         y0: index - 1, y: index,
         label: entry[0],
-        color: Number(entry[0] !== this.props.hoverRegion
-          && entry[0] !== this.props.region) ? 0 : 1,
+        color: entry[0] === this.props.hoverRegion || entry[0] === this.props.region ? 1 : 0,
       }));
 
     this.secondary = Object.entries(this.props.avgSecondary)
-      .sort((x, y) => x[1] - y[1])
-      .map(entry => {
-        const index = this.primary.findIndex(primary => primary.label === entry[0]);
+      .sort((x, y) => Number(x[1]) - Number(y[1]))
+      .map((entry, index) => {
+        // const index = this.primary.findIndex(primary => primary.label === entry[0]);
         return {
           x0: 0, x: entry[1],
           y0: index - 1, y: index,
           label: entry[0],
-          color: Number(entry[0] !== this.props.hoverRegion
-            && entry[0] !== this.props.region) ? 0 : 1,
+          color: entry[0] === this.props.hoverRegion || entry[0] === this.props.region ? 1 : 0,
         }
       });
   };
@@ -86,7 +84,7 @@ export default class Doublebar extends React.Component {
   };
 
   render() {
-    this.load(this.props);
+    this.load();
     return (
       <Container>
         <Underlay>

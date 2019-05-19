@@ -136,7 +136,7 @@ export default class App extends React.Component {
       this.state.dataPrimary.dates.findIndex(date => Number(date) === this.state.range[1]),
     ];
     primaryRange[0] = primaryRange[0] >= 0 ? primaryRange[0] : 0;
-    primaryRange[1] = primaryRange[1] >= 0 ? primaryRange[1] : this.state.primary.dates.length;
+    primaryRange[1] = primaryRange[1] >= 0 ? primaryRange[1] : this.state.dataPrimary.dates.length;
     if (primaryRange[0] === primaryRange[1]) {
       primaryRange[0] = 0;
       primaryRange[1] = this.state.dataPrimary.dates.length;

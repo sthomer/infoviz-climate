@@ -7,9 +7,19 @@ import {
   makeVisFlexible
 } from 'react-vis';
 
-const Container = styled.div``;
+const Container = styled.div`
+  border: 2px solid lightgray;
+  border-radius: 5px;
+  margin: 8px;
+  padding: 8px;
+`;
 
 const Title = styled.h1`
+  text-align: center;
+  whitespace: nowrap;
+`;
+
+const Value = styled.div`
   text-align: center;
   whitespace: nowrap;
 `;
@@ -59,9 +69,9 @@ export default class Summary extends React.Component {
         {/*<Title>*/}
         {/*  {this.props.selected}*/}
         {/*</Title>*/}
-        <Title>
-          {this.props.hover}
-        </Title>
+        <Title>{this.props.hover}</Title>
+        {/*<Value>{this.props.left.toFixed(2)}</Value>*/}
+        {/*<Value>{this.props.right.toFixed(2)}</Value>*/}
       </Container>
     );
   }

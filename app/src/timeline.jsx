@@ -10,7 +10,7 @@ import {
   Borders,
   Crosshair,
 } from 'react-vis';
-import { colors } from './colors';
+import {colors} from './colors';
 
 const Container = styled.div`
   width: 100%;
@@ -48,10 +48,10 @@ export default class Timeline extends React.Component {
   load = props => {
     const primaryRegion = this.props.primary[this.props.region];
     this.primary = primaryRegion === undefined ? undefined : primaryRegion
-      .map((value, index) => ({ x: this.props.primary.dates[index], y: Number(value) }));
+      .map((value, index) => ({x: this.props.primary.dates[index], y: Number(value)}));
     const secondaryRegion = this.props.secondary[this.props.region];
     this.secondary = secondaryRegion === undefined ? undefined : secondaryRegion
-      .map((value, index) => ({ x: this.props.secondary.dates[index], y: Number(value) }));
+      .map((value, index) => ({x: this.props.secondary.dates[index], y: Number(value)}));
 
     // const allPrimary = Object.values(props.primary)
     //   .flatMap(region => region.slice(primaryRange[0], primaryRange[1]))
@@ -68,27 +68,29 @@ export default class Timeline extends React.Component {
   render() {
     this.load();
     return (
-      this.primary === undefined || this.secondary === undefined
-        ? <Center>Data unavailable for this country</Center> :
-        <Container>
-
+      <Container>
+        {this.primary === undefined ?
+          <Center>{this.props.namePrimary} data unavailable for {this.props.region}</Center> :
           <Left>
-            <FlexibleXYPlot key={'left'} margin={{ left: 80, right: 80 }}
-              xDomain={this.props.range} onMouseLeave={() => this.setState({ crosshairValues: [] })}>
-              <HorizontalGridLines />
-              <XAxis title={this.props.region} tickFormat={year => year} />
-              <YAxis title={this.props.namePrimary} />
+            <FlexibleXYPlot key={'left'} margin={{left: 80, right: 80}}
+                            xDomain={this.props.range} onMouseLeave={() => this.setState({crosshairValues: []})}>
+              <HorizontalGridLines/>
+              <XAxis title={this.props.region} tickFormat={year => year}/>
+              <YAxis title={this.props.namePrimary}/>
               <LineSeries
                 data={this.primary}
                 stroke={colors.primary}
               />
             </FlexibleXYPlot>
-          </Left>
+          </Left>}
+        {this.secondary === undefined ?
+          <Center>{this.props.nameSecondary} data unavailable for {this.props.region}</Center> :
           <Right>
-            <FlexibleXYPlot key={'right'} margin={{ left: 80, right: 80 }}
-              xDomain={this.props.range} onMouseLeave={() => this.setState({ crosshairValues: [] })}>
-              <XAxis tickFormat={year => year} />
-              <YAxis orientation={'right'} title={this.props.nameSecondary} />
+            <FlexibleXYPlot key={'right'} margin={{left: 80, right: 80}}
+                            xDomain={this.props.range} onMouseLeave={() => this.setState({crosshairValues: []})}>
+              <XAxis tickFormat={year => year}/>
+              <YAxis orientation={'right'} title={this.props.nameSecondary}/>
+              {this.primary === undefined ? <HorizontalGridLines/> : undefined}
               <LineSeries
                 data={this.secondary}
                 stroke={colors.secondary}
@@ -106,9 +108,8 @@ export default class Timeline extends React.Component {
                 itemsFormat={(d) => [{ title: this.props.namePrimary, value: d[0].y }, { title: this.props.nameSecondary, value: d[1].y }]}
               /> */}
             </FlexibleXYPlot>
-
-          </Right>
-        </Container>
+          </Right>}
+      </Container>
     )
   }
 }
