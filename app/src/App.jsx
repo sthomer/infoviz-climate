@@ -15,6 +15,8 @@ import foresttotal from './data/forest_land_total_area_ha';
 import co2pp from './data/co2_emissions_tonnes_per_personFrom1850';
 import co2total from './data/yearly_co2_emissions_1000_tonnesFrom1850';
 import sulfurpp from './data/sulfur_emissions_per_person_kg';
+import urban from './data/urbanPopulationPourcentage';
+import population from './data/population-by-country-1850';
 // import affectedtemp from './data/people_affected_extreme_temp';
 // import deadtemp from './data/people_affected_extreme_temp';
 
@@ -61,6 +63,8 @@ const datasets = {
   co2pp: co2pp,
   co2total: co2total,
   sulfurpp: sulfurpp,
+  urban: urban,
+  population:population,
   // affectedtemp: affectedtemp,
   // deadtemp: deadtemp,
 };
@@ -72,6 +76,8 @@ const datasetNames = {
   co2pp: 'CO2 Emission (per person)',
   co2total: 'CO2 Emission (total)',
   sulfurpp: 'Sulfur Emissions (per person)',
+  urban: 'Urban Population %',
+  population: 'Population %',
   // affectedtemp: 'People Affected by Extreme Temp',
   // deadtemp: 'People Killed by Extreme Temp',
 };

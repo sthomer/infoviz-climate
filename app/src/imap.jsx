@@ -59,6 +59,8 @@ const colorScale = {
   co2pp: ['#ffffff', '#f7e8e8', '#b22222'],
   co2total: ['#ffffff', '#f7e8e8', '#b22222'],
   sulfurpp: ['#ffffff', '#ffffe5', '#ffff00'],
+  urban: ['#f3e5ab','#cad7ae', '#a2cab2','#7abcb5', '#28a1bc'],
+  population: ['#e3b390', '#d49f53', '#d46953'],
   // affectedtemp: ['white', 'lightgrey', 'darkgrey'],
   // deadtemp: ['white', 'lightgrey', 'darkgrey'],
 };
