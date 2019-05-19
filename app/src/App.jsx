@@ -17,6 +17,9 @@ import co2total from './data/yearly_co2_emissions_1000_tonnesFrom1850';
 import sulfurpp from './data/sulfur_emissions_per_person_kg';
 import urban from './data/urbanPopulationPourcentage';
 import population from './data/population-by-country-1850';
+import coal from './data/coalData1850';
+import gas from './data/gasData1850';
+import oil from './data/oilData1850';
 // import affectedtemp from './data/people_affected_extreme_temp';
 // import deadtemp from './data/people_affected_extreme_temp';
 
@@ -65,6 +68,9 @@ const datasets = {
   sulfurpp: sulfurpp,
   urban: urban,
   population:population,
+  coal:coal,
+  gas:gas,
+  oil:oil,
   // affectedtemp: affectedtemp,
   // deadtemp: deadtemp,
 };
@@ -78,6 +84,9 @@ const datasetNames = {
   sulfurpp: 'Sulfur Emissions (per person)',
   urban: 'Urban Population %',
   population: 'Population %',
+  coal: 'Coal',
+  gas:'Gas',
+  oil:'Oil',
   // affectedtemp: 'People Affected by Extreme Temp',
   // deadtemp: 'People Killed by Extreme Temp',
 };

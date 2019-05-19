@@ -61,6 +61,9 @@ const colorScale = {
   sulfurpp: ['#ffffff', '#ffffe5', '#ffff00'],
   urban: ['#f3e5ab','#cad7ae', '#a2cab2','#7abcb5', '#28a1bc'],
   population: ['#e3b390', '#d49f53', '#d46953'],
+  coal: ['#e4ecf1', '#47677d','#19242c','#141618'],
+  gas: ['#e4ecf1', '#47677d','#19242c','#141618'],
+  oil: ['#e4ecf1', '#47677d','#19242c','#141618'],
   // affectedtemp: ['white', 'lightgrey', 'darkgrey'],
   // deadtemp: ['white', 'lightgrey', 'darkgrey'],
 };
