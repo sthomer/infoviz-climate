@@ -83,7 +83,7 @@ const datasetNames = {
   co2total: 'CO2 Emission (total)',
   sulfurpp: 'Sulfur Emissions (per person)',
   urban: 'Urban Population %',
-  population: 'Population %',
+  population: 'Population',
   coal: 'Coal',
   gas:'Gas',
   oil:'Oil',
